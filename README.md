@@ -59,7 +59,14 @@ cd /root
 ```bash  
 playit  
 ```  
+5 . Update
+```bash
+rm server.zip
 
+wget https://github.com/debojitsantra/BedrockServerTermux/releases/download/v2.0/server.zip
+
+unzip -o server.zip -d /Xboyes
+```
  ---
 
  ## Step 4: Connecting Your Server to the World  
