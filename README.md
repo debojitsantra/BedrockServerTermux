@@ -59,7 +59,8 @@ cd /root
 ```bash  
 playit  
 ```  
-5 . Update
+## Update
+- Run this in the root directory of Ubuntu.
 ```bash
 rm server.zip
 
