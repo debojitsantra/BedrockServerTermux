@@ -54,7 +54,7 @@ proot-distro login ubuntu
 cd /root  
 ./run  
 ```  
-
+ 
 4 . In the  **second session**, run:  
 ```bash  
 playit  
