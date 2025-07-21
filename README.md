@@ -64,7 +64,7 @@ playit
 ```bash
 rm server.zip
 
-wget https://github.com/debojitsantra/BedrockServerTermux/releases/download/v3.0/server.zip
+wget https://github.com/debojitsantra/BedrockServerTermux/releases/download/release/server.zip
 unzip -o server.zip -d /Xboyes
 ```
  ---
