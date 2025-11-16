@@ -27,7 +27,7 @@ apt install -y playit || {
 }
 
 # Download and set up the Minecraft Bedrock server
-wget -q --show-progress https://github.com/debojitsantra/BedrockServerTermux/releases/download/v5.0/server.zip || {
+wget -q --show-progress https://github.com/debojitsantra/BedrockServerTermux/releases/download/v6.0/server.zip || {
     echo "❌ Failed to download server.zip. Check your internet connection or the link."
     exit 1
 }
@@ -38,8 +38,8 @@ unzip -o server.zip || {
 }
 
 # Configure server files
-cd Xboyes || {
-    echo "❌ 'Xboyes' folder not found. Unzip process may have failed."
+cd server || {
+    echo "❌ 'server' folder not found. Unzip process may have failed."
     exit 1
 }
 
