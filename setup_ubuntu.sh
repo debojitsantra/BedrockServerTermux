@@ -19,10 +19,10 @@ proot-distro install ubuntu || {
 }
 
 # Create 'pd' command for easy Ubuntu login
-echo "proot-distro login ubuntu" > /data/data/com.termux/files/usr/bin/pd
-chmod +x /data/data/com.termux/files/usr/bin/pd
+echo "proot-distro login ubuntu" > /data/data/com.termux/files/usr/bin/pdu
+chmod +x /data/data/com.termux/files/usr/bin/pdu
 
 # Final instructions
 echo -e "\n✅ Setup complete!"
-echo "Type 'pd' and press Enter to start Ubuntu."
+echo "Type 'pdu' and press Enter to start Ubuntu."
 echo "If you face issues, restart Termux and try again."
