@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Navigate to the server directory
-if cd Xboyes 2>/dev/null; then
-    echo "✅ Entered the 'Xboyes' directory."
+if cd server 2>/dev/null; then
+    echo "✅ Entered the 'server' directory."
 else
-    echo "❌ Error: 'Xboyes' folder not found. Please ensure the server is correctly installed."
+    echo "❌ Error: 'server' folder not found. Please ensure the server is correctly installed."
     exit 1
 fi
 
