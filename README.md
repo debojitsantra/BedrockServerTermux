@@ -51,7 +51,7 @@ proot-distro login ubuntu
 
 3 . In the  **first session**, run the following to start the server:  
 ```bash  
-cd /root  
+cd 
 ./run  
 ```  
  
