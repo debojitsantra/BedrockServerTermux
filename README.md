@@ -64,7 +64,7 @@ playit
 ```bash
 
 cd server
-wget https://github.com/debojitsantra/BedrockServerTermux/update.sh
+wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh
 chmod +x update.sh
 ./update.sh
 
