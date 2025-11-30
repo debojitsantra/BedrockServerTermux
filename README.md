@@ -62,10 +62,12 @@ playit
 ## Update
 - Run this in the root directory of Ubuntu.
 ```bash
-rm server.zip
 
-wget https://github.com/debojitsantra/BedrockServerTermux/releases/download/v7.0/server.zip
-unzip -o server.zip -d /server
+cd server
+wget https://github.com/debojitsantra/BedrockServerTermux/update.sh
+chmod +x update.sh
+./update.sh
+
 ```
  ---
 
