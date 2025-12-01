@@ -1,5 +1,5 @@
  # BedrockServerTermux (Android - Termux & Ubuntu)
-
+[Beginner Friendly Documentation](https://debojitsantra.vercel.app/BedrockServerTermux)
  ## Prerequisites  
  -   *Termux* app installed (from F-Droid recommended)  
  -   Stable internet connection 
