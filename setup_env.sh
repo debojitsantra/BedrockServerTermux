@@ -4,7 +4,7 @@
 apt update -y && apt upgrade -y
 
 # Install essential packages
-apt install -y git box64 sudo jq unzip || {
+apt install -y git box64 sudo jq unzip tar || {
     echo "❌ Failed to install required packages. Please check your internet connection."
     exit 1
 }
