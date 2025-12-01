@@ -44,9 +44,12 @@ cd server || {
 }
 
 chmod +x bedrock_server start.sh
-
 # Return to home directory
 cd
+wget -q --show-progress https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
+chmod +x run
+
+
 
 # Final message
 echo -e "\n✅ Environment setup complete!"
