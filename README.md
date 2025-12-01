@@ -60,7 +60,7 @@ cd
 playit  
 ```  
 ## Update
-- Run this in the root directory of Ubuntu.
+- Run this in the root directory of Ubuntu. it will automatically install the new version. 
 ```bash
 
 cd server
