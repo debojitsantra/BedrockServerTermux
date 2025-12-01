@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Minecraft Bedrock Server on Android (Termux + Ubuntu)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <title>BedrockServerTermux – Beginner Guide (Android + Termux + Ubuntu)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Beginner friendly guide to install and run a Minecraft Bedrock server on Android using Termux, Ubuntu, Box64 and playit.gg.">
   <style>
     :root {
-      --bg: #0b1020;
-      --bg-alt: #14192b;
-      --card: #1b2140;
-      --accent: #4da3ff;
-      --accent-soft: rgba(77, 163, 255, 0.1);
-      --text: #e8ecff;
-      --muted: #b4bbd8;
-      --danger: #ff6b6b;
-      --success: #58d68d;
-      --border: #2c3458;
-      --code-bg: #111629;
-      --font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --mono: ui-monospace, Menlo, Monaco, "SF Mono", monospace;
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --bg-alt: #f5f5f5;
+      --text: #111111;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --border: #e5e7eb;
+      --code-bg: #0f172a;
+      --code-text: #e5e7eb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #020617;
+        --bg-alt: #020617;
+        --text: #e5e7eb;
+        --accent: #60a5fa;
+        --accent-soft: #1d283a;
+        --border: #1f2937;
+        --code-bg: #020617;
+        --code-text: #e5e7eb;
+      }
     }
 
     * {
@@ -28,521 +38,397 @@
     body {
       margin: 0;
       padding: 0;
-      font-family: var(--font);
-      background: radial-gradient(circle at top, #1a2544, var(--bg));
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
 
-    .container {
+    .page {
       max-width: 960px;
       margin: 0 auto;
-      padding: 2rem 1.2rem 3rem;
+      padding: 1rem 1.1rem 2.5rem;
     }
 
     header {
-      text-align: center;
-      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      letter-spacing: 0.05em;
+    h1 {
+      font-size: 1.6rem;
+      margin: 0 0 0.3rem;
     }
 
-    header p {
-      margin-top: 0.6rem;
-      color: var(--muted);
-      font-size: 0.98rem;
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding-top: 0.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      margin: 0.4rem 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus {
+      text-decoration: underline;
     }
 
     .tagline {
-      display: inline-block;
-      margin-top: 0.75rem;
-      padding: 0.2rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid var(--accent-soft);
-      background: rgba(0, 0, 0, 0.18);
-      font-size: 0.8rem;
-      color: var(--muted);
+      font-size: 0.95rem;
+      color: #6b7280;
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr);
-      gap: 1.75rem;
+    .note {
+      border-left: 3px solid var(--accent);
+      background: var(--accent-soft);
+      padding: 0.4rem 0.7rem;
+      margin: 0.6rem 0;
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 800px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), transparent);
-      border-radius: 1rem;
-      padding: 1.25rem 1.3rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(18px);
-    }
-
-    .card h2,
-    .card h3 {
-      margin-top: 0;
-      margin-bottom: 0.6rem;
-    }
-
-    .card h2 {
-      font-size: 1.3rem;
-    }
-
-    .card h3 {
-      font-size: 1.1rem;
-    }
-
-    .pill {
-      display: inline-block;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent);
-      margin-bottom: 0.4rem;
+    .warning {
+      border-left: 3px solid #b91c1c;
+      background: rgba(248, 113, 113, 0.1);
+      padding: 0.4rem 0.7rem;
+      margin: 0.6rem 0;
+      font-size: 0.9rem;
     }
 
     ul,
     ol {
-      margin: 0.35rem 0 0.75rem 1.1rem;
-      padding: 0;
+      margin: 0.4rem 0 0.6rem 1.2rem;
+      padding-left: 1rem;
     }
 
     li {
-      margin-bottom: 0.25rem;
+      margin: 0.2rem 0;
     }
 
     code {
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      background: var(--code-bg);
-      padding: 0.08rem 0.3rem;
-      border-radius: 0.3rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9rem;
+      background: rgba(15, 23, 42, 0.06);
+      padding: 0.1rem 0.3rem;
+      border-radius: 4px;
     }
 
     pre {
+      margin: 0.5rem 0 0.8rem;
+      padding: 0.65rem 0.75rem;
       background: var(--code-bg);
-      padding: 0.75rem 0.9rem;
-      border-radius: 0.6rem;
+      color: var(--code-text);
+      border-radius: 6px;
       overflow-x: auto;
-      font-family: var(--mono);
-      font-size: 0.85rem;
-      border: 1px solid #252c4a;
-      margin: 0.4rem 0 0.9rem;
+      font-size: 0.88rem;
     }
 
     pre code {
       background: transparent;
       padding: 0;
+      white-space: pre;
     }
 
-    .note,
-    .warning,
-    .tip {
-      border-radius: 0.75rem;
-      padding: 0.7rem 0.8rem;
-      font-size: 0.88rem;
-      margin-top: 0.6rem;
-      border: 1px solid transparent;
-    }
-
-    .note {
-      background: rgba(77, 163, 255, 0.06);
-      border-color: rgba(77, 163, 255, 0.3);
-    }
-
-    .tip {
-      background: rgba(88, 214, 141, 0.06);
-      border-color: rgba(88, 214, 141, 0.3);
-    }
-
-    .warning {
-      background: rgba(255, 107, 107, 0.06);
-      border-color: rgba(255, 107, 107, 0.3);
-    }
-
-    .label {
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.7rem;
-      display: block;
-      margin-bottom: 0.2rem;
-      opacity: 0.95;
-    }
-
-    .note .label {
-      color: var(--accent);
-    }
-
-    .tip .label {
-      color: var(--success);
-    }
-
-    .warning .label {
-      color: var(--danger);
+    .toc {
+      padding: 0.7rem 0.75rem;
+      border-radius: 6px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+      margin-bottom: 0.8rem;
     }
 
     .toc ul {
-      list-style: none;
-      margin-left: 0;
-      font-size: 0.9rem;
+      margin: 0.2rem 0 0;
+      padding-left: 1rem;
     }
 
-    .toc li {
-      margin: 0.15rem 0;
-    }
-
-    .toc a {
-      color: var(--muted);
-      text-decoration: none;
-    }
-
-    .toc a:hover {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-
-    a {
-      color: var(--accent);
-    }
-
-    .step-title {
+    .step-label {
+      display: inline-block;
       font-weight: 600;
-      margin-top: 0.6rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .inline-heading {
-      font-weight: 600;
-    }
-
-    hr {
-      border: none;
-      border-top: 1px solid #262c4c;
-      margin: 1.25rem 0;
-    }
-
-    footer {
-      margin-top: 2rem;
-      text-align: center;
+      padding: 0.08rem 0.4rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
       font-size: 0.8rem;
-      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 1.9rem;
+      }
+
+      .page {
+        padding: 1.5rem 1.4rem 3rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="page">
     <header>
-      <h1>Bedrock Server on Android</h1>
-      <p>Beginner-friendly guide to hosting a Minecraft Bedrock server using Termux and Ubuntu on Android.</p>
-      <div class="tagline">Runs fully on your phone. No PC required.</div>
+      <h1>BedrockServerTermux – Beginner Guide</h1>
+      <p class="tagline">
+        Run a Minecraft Bedrock Dedicated Server on Android using Termux, Ubuntu,
+        Box64 and playit.gg.
+      </p>
     </header>
 
-    <div class="layout">
-      <!-- MAIN CONTENT -->
-      <main>
-        <section id="intro" class="card">
-          <span class="pill">Overview</span>
-          <h2>What You Will Do</h2>
-          <p>
-            This guide shows you how to run a Minecraft Bedrock server on your Android device using
-            Termux and an Ubuntu environment. You will:
-          </p>
-          <ul>
-            <li>Install Ubuntu inside Termux</li>
-            <li>Download and set up the Bedrock server</li>
-            <li>Use Playit to expose your server to the internet</li>
-            <li>Update the server when a new version is available</li>
-          </ul>
+    <section aria-label="Introduction">
+      <p>
+        This page shows step-by-step how to host a Minecraft Bedrock server on your
+        Android device using the Termux app, an Ubuntu environment, and the
+        BedrockServerTermux scripts.
+      </p>
+      
+    </section>
 
-          <div class="note">
-            <span class="label">Good to know</span>
-            You do not need root access. Everything runs inside Termux and a proot Ubuntu environment.
-          </div>
-        </section>
+    <nav class="toc" aria-label="Table of contents">
+      <strong>On this page</strong>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#step1">Step&nbsp;1 – Install Ubuntu in Termux</a></li>
+        <li><a href="#step2">Step&nbsp;2 – Setup environment &amp; Bedrock server</a></li>
+        <li><a href="#step3">Step&nbsp;3 – Start the server &amp; playit</a></li>
+        <li><a href="#update">Update the server</a></li>
+        <li><a href="#connect-world">Connect your server to the world</a></li>
+        <li><a href="#tips">Tips &amp; troubleshooting</a></li>
+      </ul>
+    </nav>
 
-        <section id="prerequisites" class="card">
-          <span class="pill">Setup</span>
-          <h2>Prerequisites</h2>
-          <ul>
-            <li><strong>Android phone or tablet</strong> with enough free storage and RAM</li>
-            <li><strong>Termux</strong> installed (F-Droid version is recommended)</li>
-            <li><strong>Stable internet connection</strong></li>
-            <li><strong>Very basic command line usage</strong> (copy/paste commands is enough)</li>
-          </ul>
+    <section id="prerequisites">
+      <h2>Prerequisites</h2>
+      <p>Before starting, make sure you have:</p>
+      <ul>
+        <li>
+          <strong>Termux app</strong> installed on your Android device
+          (F-Droid version is recommended).
+        </li>
+        <li>A <strong>stable internet connection</strong>.</li>
+        <li>
+          <strong>Basic knowledge of simple commands</strong> like
+          <code>cd</code>, <code>ls</code>, and copy–paste in Termux.
+        </li>
+      </ul>
+      <div class="note">
+        <strong>Tip:</strong> If Termux asks for storage permission when you
+        first run it, allow it, then close and reopen Termux once.
+      </div>
+    </section>
 
-          <div class="tip">
-            <span class="label">Tip</span>
-            In Termux, long-press to paste commands you copied. It makes life easier and avoids typing mistakes.
-          </div>
-        </section>
+    <section id="step1">
+      <h2>Step 1 – Install Ubuntu in Termux</h2>
 
-        <section id="step1" class="card">
-          <span class="pill">Step 1</span>
-          <h2>Install Ubuntu in Termux</h2>
-
-          <p class="step-title">1. Open Termux</p>
-          <p>Open the Termux app on your Android device. Make sure you are connected to the internet.</p>
-
-          <p class="step-title">2. Update Termux and install Ubuntu setup script</p>
-          <p>Run these commands one by one:</p>
-
-          <pre><code class="language-bash">apt update -y
+      <h3>1.1 Open Termux and update packages</h3>
+      <p>Open the Termux app and run these commands one by one:</p>
+      <pre><code>apt update -y
 apt upgrade -y
-apt install wget -y
-wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_ubuntu.sh
+apt install wget -y</code></pre>
+
+      <h3>1.2 Download and run the Ubuntu setup script</h3>
+      <p>This will install an Ubuntu environment inside Termux using proot.</p>
+      <pre><code>wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_ubuntu.sh
 bash setup_ubuntu.sh</code></pre>
 
-          <p>
-            The script will download and configure an Ubuntu environment inside Termux using <code>proot</code>.
-          </p>
+      <div class="note">
+        <strong>Note:</strong> The script may download many packages. This can
+        take some time depending on your internet speed.
+      </div>
 
-          <div class="note">
-            <span class="label">Note</span>
-            This step may take a while depending on your internet speed. Let it finish completely.
-          </div>
+      <h3>1.3 Log in to Ubuntu</h3>
+      <p>
+        After the script finishes, log in to your new Ubuntu system from Termux:
+      </p>
+      <pre><code>proot-distro login ubuntu</code></pre>
+      <p>
+        You are now inside Ubuntu running on top of Termux. Commands you run here
+        are separate from the main Android system.
+      </p>
+    </section>
 
-          <p class="step-title">3. Log in to Ubuntu</p>
-          <p>After the installation is complete, log into Ubuntu with:</p>
+    <section id="step2">
+      <h2>Step 2 – Setup environment &amp; Minecraft Bedrock server</h2>
+      <span class="step-label">Inside Ubuntu shell</span>
 
-          <pre><code class="language-bash">proot-distro login ubuntu</code></pre>
-
-          <p>
-            Your prompt should now look different, indicating you are inside the Ubuntu environment
-            (for example, the path might start with <code>/root</code>).
-          </p>
-        </section>
-
-        <section id="step2" class="card">
-          <span class="pill">Step 2</span>
-          <h2>Download Environment and Bedrock Server</h2>
-
-          <p>Make sure you are inside the Ubuntu session (you should have run <code>proot-distro login ubuntu</code>).</p>
-
-          <p class="step-title">1. Update Ubuntu and download setup script</p>
-          <p>Run these commands:</p>
-
-          <pre><code class="language-bash">apt update -y
+      <h3>2.1 Update Ubuntu and install wget</h3>
+      <p>Still inside the Ubuntu session, run:</p>
+      <pre><code>apt update -y
 apt upgrade -y
-apt install wget -y
-wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_env.sh
+apt install wget -y</code></pre>
+
+      <h3>2.2 Download and run environment setup script</h3>
+      <p>
+        This script will install required tools (Box64, Playit, Git, etc.) and
+        download/unzip the official Minecraft Bedrock server files.
+      </p>
+      <pre><code>wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_env.sh
 bash setup_env.sh</code></pre>
 
-          <p>The <code>setup_env.sh</code> script will:</p>
-          <ul>
-            <li>Install required packages like <strong>Box64</strong>, <strong>Playit</strong>, and <strong>Git</strong></li>
-            <li>Download the <strong>Minecraft Bedrock server</strong> files</li>
-            <li>Unzip and prepare the server folder</li>
-          </ul>
+      <div class="note">
+        <strong>What this does:</strong>
+        <ul>
+          <li>Installs needed packages like Box64, Playit, Git.</li>
+          <li>Downloads the Minecraft Bedrock Dedicated Server and unzips it.</li>
+          <li>Prepares helper scripts so you can start the server easily.</li>
+        </ul>
+      </div>
+    </section>
 
-          <div class="tip">
-            <span class="label">Tip</span>
-            If a command fails, check your internet connection and run
-            <code>apt update -y</code> once more, then retry the script.
-          </div>
-        </section>
+    <section id="step3">
+      <h2>Step 3 – Run the Minecraft server and playit</h2>
 
-        <section id="step3" class="card">
-          <span class="pill">Step 3</span>
-          <h2>Run the Minecraft Server</h2>
+      <h3>3.1 Open two Termux sessions</h3>
+      <p>
+        You need two Termux sessions: one for the Bedrock server and one
+        for the playit tunnel.
+      </p>
+      <ul>
+        <li>Open Termux.</li>
+        <li>Open the side menu (or long‑press the session tab) and create a new session.</li>
+      </ul>
 
-          <p>To keep both the server and Playit running, you will use two Termux sessions.</p>
+      <h3>3.2 Log into Ubuntu in both sessions</h3>
+      <p>In <strong>each</strong> Termux session, run:</p>
+      <pre><code>proot-distro login ubuntu</code></pre>
 
-          <p class="step-title">1. Open two Termux sessions</p>
-          <ul>
-            <li>Open Termux as usual. This is <strong>Session 1</strong>.</li>
-            <li>Open the side menu or use the Termux plus button to create <strong>Session 2</strong>.</li>
-          </ul>
-
-          <p class="step-title">2. Log in to Ubuntu in both sessions</p>
-          <p>In each session, run:</p>
-
-          <pre><code class="language-bash">proot-distro login ubuntu</code></pre>
-
-          <p class="step-title">3. Start the Minecraft server (Session 1)</p>
-          <p>In <strong>Session 1</strong> (Ubuntu already logged in), run:</p>
-
-          <pre><code class="language-bash">cd
+      <h3>3.3 Start the Bedrock server (first session)</h3>
+      <p>
+        In the <strong>first</strong> Ubuntu session, go to your home directory
+        and run the helper script:
+      </p>
+      <pre><code>cd
 ./run</code></pre>
+      <p>
+        Keep this session open. Once the server fully starts, it will show logs
+        but you can leave it running in the background.
+      </p>
 
-          <p>
-            This should start the Bedrock server. The terminal will show log messages from the server.
-            Keep this session open and running.
-          </p>
+      <h3>3.4 Start playit tunnel (second session)</h3>
+      <p>In the <strong>second</strong> Ubuntu session, simply run:</p>
+      <pre><code>playit</code></pre>
+      <p>
+        Wait for playit to start. It will show a link that you can open in your
+        browser to configure the tunnel.
+      </p>
+    </section>
 
-          <div class="warning">
-            <span class="label">Important</span>
-            Make sure you are in the <code>/root</code> directory inside Ubuntu before running
-            <code>./run</code>. Using <code>cd</code> with no arguments usually takes you there.
-          </div>
+    <section id="update">
+      <h2>Update the Bedrock server</h2>
+      <p>
+        When a new Bedrock server version is available, you can update it easily
+        using the provided script.
+      </p>
 
-          <p class="step-title">4. Start Playit tunnel (Session 2)</p>
-          <p>In <strong>Session 2</strong> (also inside Ubuntu), run:</p>
+      <h3>4.1 Go to the server directory</h3>
+      <p>Inside Ubuntu (Termux session), run:</p>
+      <pre><code>cd server</code></pre>
 
-          <pre><code class="language-bash">playit</code></pre>
-
-          <p>
-            This will start the Playit client, which creates a tunnel so players on the internet can
-            connect to your local server.
-          </p>
-        </section>
-
-        <section id="step4" class="card">
-          <span class="pill">Step 4</span>
-          <h2>Connect Your Server to the World</h2>
-
-          <p class="step-title">1. Get the Playit link</p>
-          <p>
-            When you run <code>playit</code>, it will print a link in the terminal. That link is for
-            configuring your tunnel.
-          </p>
-
-          <p class="step-title">2. Open the link in your browser</p>
-          <ul>
-            <li>Copy the Playit link from Termux.</li>
-            <li>Open it in your browser on your phone or another device.</li>
-            <li>Sign in or create an account on <strong>playit.gg</strong>.</li>
-            <li>Follow the instructions to configure a Minecraft Bedrock tunnel.</li>
-          </ul>
-
-          <p>
-            After configuration, Playit will give you an address (host and port) that your friends
-            can use in their Minecraft Bedrock client to connect to your server.
-          </p>
-
-          <div class="tip">
-            <span class="label">Tip</span>
-            Share the address from Playit with your friends. They can enter it as an external server
-            in Minecraft Bedrock.
-          </div>
-        </section>
-
-        <section id="update" class="card">
-          <span class="pill">Update</span>
-          <h2>Updating the Bedrock Server</h2>
-
-          <p>
-            When a new version of the Bedrock server is available, you can update automatically from
-            inside Ubuntu.
-          </p>
-
-          <p class="step-title">1. Go to the server directory</p>
-          <p>From inside the Ubuntu session, run:</p>
-
-          <pre><code class="language-bash">cd server
-wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh
+      <h3>4.2 Download and run the update script</h3>
+      <p>This will download and install the latest version automatically:</p>
+      <pre><code>wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh
 chmod +x update.sh
 ./update.sh</code></pre>
 
-          <p>
-            The script will download and install the latest version of the Bedrock server for you.
-          </p>
+      <div class="note">
+        <strong>Tip:</strong> If the server is running while you update,
+        stop it first, then run
+        <code>./run</code> after the update completes.
+      </div>
+    </section>
 
-          <div class="note">
-            <span class="label">Note</span>
-            Make sure the server is stopped before updating to avoid file conflicts. You can stop
-            the server by using the server console or closing the session where it is running.
-          </div>
-        </section>
+    <section id="connect-world">
+      <h2>Step 4 – Connect your server to the world</h2>
 
-        <section id="troubleshooting" class="card">
-          <span class="pill">Help</span>
-          <h2>Tips and Troubleshooting</h2>
+      <h3>5.1 Open the playit link</h3>
+      <p>
+        After you start <code>playit</code> in the second session, it will print
+        a link (a URL).
+      </p>
+      <ol>
+        <li>Long‑press to copy the link from Termux.</li>
+        <li>Open the link in your phone or PC browser.</li>
+      </ol>
 
-          <p class="inline-heading">Common checks</p>
-          <ul>
-            <li>
-              <strong>Server not starting:</strong> Make sure you are in the correct directory
-              (usually <code>/root</code>) before running <code>./run</code>.
-            </li>
-            <li>
-              <strong>Script errors:</strong> Run <code>apt update -y</code> and
-              <code>apt upgrade -y</code> in Ubuntu, then try the script again.
-            </li>
-            <li>
-              <strong>Playit not connecting:</strong> Check that the Minecraft server is running,
-              and that you completed the tunnel setup on the Playit website.
-            </li>
-          </ul>
+      <h3>5.2 Configure playit.gg</h3>
+      <p>
+        On the playit.gg website, follow the steps to connect your local
+        Bedrock server to a public address.
+      </p>
+      <ul>
+        <li>Log in or create a playit.gg account if needed.</li>
+        <li>Confirm the agent and create a tunnel for Minecraft Bedrock.</li>
+        <li>Use the address shown on playit.gg in Minecraft to join your server.</li>
+      </ul>
 
-          <div class="warning">
-            <span class="label">Do not close Termux</span>
-            If you close Termux or kill the app from recent apps, your server and Playit tunnel
-            will stop. Keep Termux running in the background while players are connected.
-          </div>
+      <div class="note">
+        <strong>How it works:</strong> playit.gg forwards traffic from its public
+        address to your local Bedrock server, so friends can join without you
+        doing any router port forwarding.
+      </div>
+    </section>
 
-          <hr />
+    <section id="tips">
+      <h2>Tips &amp; troubleshooting</h2>
 
-          <p class="inline-heading">Quick sanity checklist</p>
-          <ul>
-            <li>Termux installed and up to date</li>
-            <li>Ubuntu installed via <code>setup_ubuntu.sh</code></li>
-            <li>Environment and server installed via <code>setup_env.sh</code></li>
-            <li>Server started with <code>./run</code> in Session 1</li>
-            <li>Playit running with <code>playit</code> in Session 2</li>
-            <li>Playit tunnel configured on the website</li>
-          </ul>
-        </section>
-      </main>
+      <h3>General tips</h3>
+      <ul>
+        <li>
+          Make sure you are in the <code>/root</code> (home) directory inside
+          Ubuntu before running <code>./run</code>.
+        </li>
+        <li>
+          If a script gives package errors, first run:
+          <pre><code>apt update</code></pre>
+          and then try the script again.
+        </li>
+        <li>
+          Do not close the Termux sessions running the server or playit while you
+          are playing. Closing them will stop the server.
+        </li>
+      </ul>
 
-      <!-- SIDEBAR -->
-      <aside>
-        <section class="card toc">
-          <span class="pill">Navigation</span>
-          <h3>On this page</h3>
-          <ul>
-            <li><a href="#intro">Overview</a></li>
-            <li><a href="#prerequisites">Prerequisites</a></li>
-            <li><a href="#step1">Step 1: Install Ubuntu</a></li>
-            <li><a href="#step2">Step 2: Setup Environment</a></li>
-            <li><a href="#step3">Step 3: Run Server</a></li>
-            <li><a href="#step4">Step 4: Connect with Playit</a></li>
-            <li><a href="#update">Updating the Server</a></li>
-            <li><a href="#troubleshooting">Troubleshooting</a></li>
-          </ul>
-        </section>
+      <h3>Common problems</h3>
+      <ul>
+        <li>
+          <strong>Command not found:</strong> Check spelling and make sure you
+          are logged into Ubuntu (<code>proot-distro login ubuntu</code>).
+        </li>
+        <li>
+          <strong>Permission denied when running <code>./run</code>:</strong>
+          make sure the setup scripts completed without errors. If needed,
+          re-run the environment setup step.
+        </li>
+        <li>
+          <strong>Friends cannot join:</strong> Confirm that
+          <code>playit</code> is still running and you are using the exact
+          address shown on the playit.gg dashboard.
+        </li>
+      </ul>
 
-        <section class="card">
-          <span class="pill">Cheat Sheet</span>
-          <h3>Essential Commands</h3>
-
-          <p class="inline-heading">Log into Ubuntu</p>
-          <pre><code class="language-bash">proot-distro login ubuntu</code></pre>
-
-          <p class="inline-heading">Start server (inside Ubuntu)</p>
-          <pre><code class="language-bash">cd
-./run</code></pre>
-
-          <p class="inline-heading">Start Playit (inside Ubuntu)</p>
-          <pre><code class="language-bash">playit</code></pre>
-
-          <p class="inline-heading">Update server (inside Ubuntu)</p>
-          <pre><code class="language-bash">cd server
-./update.sh</code></pre>
-
-          <div class="tip">
-            <span class="label">Tip</span>
-            Keep this cheat sheet handy once everything is installed. Most days you only need
-            the login, run, and playit commands.
-          </div>
-        </section>
-      </aside>
-    </div>
-
-    <footer>
-      Minecraft Bedrock Server on Android · Termux + Ubuntu setup guide
-    </footer>
+      <div class="warning">
+        <strong>Battery and heat:</strong> Running a Minecraft server plus
+        tunneling on a phone can use a lot of CPU. Keep the phone plugged in and
+        on a cool surface while hosting long sessions.
+      </div>
+    </section>
   </div>
 </body>
 </html>
