@@ -6,29 +6,29 @@
 
 > Run a fully functional Minecraft Bedrock Dedicated Server on your Android device using Termux and Ubuntu (proot-distro)
 
-## 📖 Table of Contents
+## Table of Contents
 
-- [Overview](#-overview)
-- [Features](#-features)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
+- [Overview](#overview)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
   - [Step 1: Install Ubuntu in Termux](#step-1-install-ubuntu-in-termux)
   - [Step 2: Setup Environment & Minecraft Server](#step-2-setup-environment--minecraft-server)
   - [Step 3: Running the Server](#step-3-running-the-server)
   - [Step 4: Making Your Server Accessible](#step-4-making-your-server-accessible)
-- [Server Management](#-server-management)
-- [Updating Your Server](#-updating-your-server)
-- [Access via File Manager](#-accessing-ubuntu-files)
-- [Installing Mods / Add-ons](#-installing-mods--add-ons)
-- [Configuration](#-configuration)
-- [Troubleshooting](#-troubleshooting)
-- [Performance Considerations](#-performance-considerations)
-- [FAQ](#-faq)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Acknowledgments](#-acknowledgments)
+- [Server Management](#server-management)
+- [Updating Your Server](#updating-your-server)
+- [Access via File Manager](#accessing-ubuntu-files)
+- [Installing Mods / Add-ons](#installing-mods--add-ons)
+- [Configuration](#configuration)
+- [Troubleshooting](#troubleshooting)
+- [Performance Considerations](#performance-considerations)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-## 🎮 Overview
+##  Overview
 
 BedrockServerTermux allows you to host a Minecraft Bedrock Edition server directly on your Android device without requiring root access. This project leverages:
 
@@ -37,16 +37,16 @@ BedrockServerTermux allows you to host a Minecraft Bedrock Edition server direct
 - **Box64**: ARM64 to x86_64 translation layer for running the Bedrock server
 - **Playit.gg**: Tunneling service to make your server accessible over the internet
 
-## ✨ Features
+##  Features
 
-- ✅ **No Root Required**: Works on any modern Android device
-- ✅ **Automated Setup**: Simple installation scripts handle all dependencies
-- ✅ **Full-Featured Server**: Supports all Minecraft Bedrock Edition features
-- ✅ **Easy Updates**: One-command server updates
-- ✅ **Internet Accessible**: Built-in tunneling support with Playit.gg
-- ✅ **Free to Use**: No subscriptions or hosting fees
+-  **No Root Required**: Works on any modern Android device
+-  **Automated Setup**: Simple installation scripts handle all dependencies
+- **Full-Featured Server**: Supports all Minecraft Bedrock Edition features
+-  **Easy Updates**: One-command server updates
+- **Internet Accessible**: Built-in tunneling support with Playit.gg
+- **Free to Use**: No subscriptions or hosting fees
 
-## 📋 Prerequisites
+##  Prerequisites
 
 Before you begin, ensure you have:
 
@@ -67,7 +67,7 @@ Before you begin, ensure you have:
   - Familiarity with command-line interfaces helpful but not required
   - Ability to follow step-by-step instructions
 
-## 🚀 Installation
+## Installation
 
 ### Step 1: Install Ubuntu in Termux
 
@@ -164,7 +164,7 @@ playit
 
 4. Share the public address with friends to let them join your server!
 
-## 🎛️ Server Management
+##  Server Management
 
 ### Starting the Server
 
@@ -198,7 +198,7 @@ While the server is running, you can use standard Bedrock server commands:
 
 Full command list: [Official Bedrock Server Commands](https://minecraft.wiki/w/Commands)
 
-## 🔄 Updating Your Server
+##  Updating Your Server
 
 To update to the latest stable or beta version of Minecraft Bedrock Server:
 ```bash
@@ -217,7 +217,7 @@ chmod +x update.sh
 
 
 
-## 📂 Accessing Ubuntu Files
+##  Accessing Ubuntu Files
 
 ### File Locations
 
@@ -246,11 +246,11 @@ After creating the symlink, you can browse your Ubuntu files at:
 > **Note**: You'll need a file manager that supports Storage Access Framework (SAF), such as Material Files, Solid Explorer, or MiXplorer.
 
 
-## 🧩 Installing Mods / Add-ons
+##  Installing Mods / Add-ons
 
 > This section explains how to install Minecraft Bedrock add-ons (often called "mods") on this server.
 
-### ⚠️ Important Notes (Read First)
+###  Important Notes (Read First)
 
 - Minecraft Bedrock does NOT support Java mods (Forge/Fabric .jar files)
 - Bedrock uses Add-ons, which come as:
@@ -435,7 +435,7 @@ Pack Stack - <YourAddonName>
 
 
 
-## ⚙️ Configuration
+## Configuration
 
 ### Server Properties
 
@@ -469,7 +469,7 @@ cd ~/server
 tar -czf world_backup_$(date +%Y%m%d).tar.gz worlds/
 ```
 
-## 🔧 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -538,7 +538,7 @@ If you encounter issues:
    - Complete error messages
    - Steps to reproduce the problem
 
-## ⚡ Performance Considerations
+##  Performance Considerations
 
 ### Expected Performance
 
@@ -562,7 +562,7 @@ The server runs through Box64 (x86_64 → ARM64 translation), which adds some pe
 - Some lag is expected compared to PC hosting
 - Performance varies by device capabilities
 
-## 💡 FAQ
+##  FAQ
 
 **Q: Do I need root access?**  
 A: No, this solution works without root privileges.
@@ -588,7 +588,7 @@ A: Varies by player count and activity. Expect 50-200 MB per hour with active pl
 **Q: Can I use a custom port?**  
 A: Yes, modify `server-port` in `server.properties` and configure Playit accordingly.
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Here's how you can help:
 
@@ -607,11 +607,11 @@ If you want to contribute code:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **[Termux](https://termux.com/)** - Terminal emulator for Android
 - **[proot-distro](https://github.com/termux/proot-distro)** - Termux package for managing Linux distributions
@@ -620,7 +620,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 - **[Mojang/Microsoft](https://www.minecraft.net/)** - Minecraft Bedrock Dedicated Server
 - All contributors and users who have helped improve this project
 
-## 📞 Support & Community
+##  Support & Community
 
 - **Website**: [debojitsantra.vercel.app/BedrockServerTermux](https://debojitsantra.vercel.app/BedrockServerTermux)
 - **GitHub Issues**: [Report bugs or request features](https://github.com/debojitsantra/BedrockServerTermux/issues)
