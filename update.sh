@@ -25,21 +25,56 @@ need_cmd unzip
 need_cmd wget
 need_cmd tar
 
+echo ""
+echo "========================================="
+echo "  Minecraft Bedrock Server Update Tool"
+echo "========================================="
+echo ""
+echo "Choose which version to install:"
+echo ""
+echo "  1) Stable (Recommended for most servers)"
+echo ""
+echo "  2) Preview/Beta"
+echo ""
+echo -n "Enter your choice (1 or 2): "
+read -r VERSION_CHOICE
+
+case "$VERSION_CHOICE" in
+  1)
+    DOWNLOAD_TYPE="serverBedrockLinux"
+    VERSION_NAME="Stable"
+    ;;
+  2)
+    DOWNLOAD_TYPE="serverBedrockPreviewLinux"
+    VERSION_NAME="Preview/Beta"
+    ;;
+  *)
+    echo ""
+    echo " Invalid choice. Please run the script again and choose 1 or 2."
+    exit 1
+    ;;
+esac
+
+echo ""
+echo " Selected: $VERSION_NAME version"
+echo ""
 echo "Fetching latest Bedrock server download URL from Mojang..."
 
 DOWNLOAD_URL="$(
   curl -s "$API_URL" \
-  | jq -r '.result.links[] | select(.downloadType=="serverBedrockLinux") | .downloadUrl'
+  | jq -r ".result.links[] | select(.downloadType==\"$DOWNLOAD_TYPE\") | .downloadUrl"
 )"
 
 if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-  echo " Could not get latest Bedrock server download URL. API may have changed or is down."
+  echo " Could not get latest Bedrock server download URL."
+  echo "   The API may have changed or is down."
+  echo "   Download type requested: $DOWNLOAD_TYPE"
   exit 1
 fi
 
-echo " Found latest server URL:"
+echo " Found latest $VERSION_NAME server URL:"
 echo "   $DOWNLOAD_URL"
-echo
+echo ""
 
 # backup
 if [ -d "worlds" ]; then
@@ -47,49 +82,67 @@ if [ -d "worlds" ]; then
   BACKUP_FILE="worlds_backup_${TS}.tar.gz"
   echo " Backing up 'worlds' directory to $BACKUP_FILE ..."
   tar -czf "$BACKUP_FILE" worlds || {
-    echo "Failed to create backup. Aborting to avoid data loss."
+    echo "❌ Failed to create backup. Aborting to avoid data loss."
     exit 1
   }
   echo " Backup complete."
-  echo
+  echo ""
 else
-  echo "No 'worlds' directory found. Skipping world backup."
-  echo
+  echo "  No 'worlds' directory found. Skipping world backup."
+  echo ""
 fi
 
 # download
-echo "Downloading latest Bedrock server..."
+echo "  Downloading latest $VERSION_NAME Bedrock server..."
 rm -f "$SERVER_ZIP"
 
 wget -q --show-progress "$DOWNLOAD_URL" -O "$SERVER_ZIP" || {
-  echo "Failed to download Bedrock server ZIP."
+  echo " Failed to download Bedrock server ZIP."
   exit 1
 }
 
-echo "Download complete: $SERVER_ZIP"
-echo
+echo " Download complete: $SERVER_ZIP"
+echo ""
 
-echo "Updating server files from ZIP..."
+echo " Updating server files from ZIP..."
 unzip -o "$SERVER_ZIP" || {
-  echo "Failed to unzip server package."
+  echo " Failed to unzip server package."
   exit 1
 }
-
 
 if [ -f "bedrock_server" ]; then
   chmod +x bedrock_server
+  echo " Made bedrock_server executable"
 fi
 
-
-cd $HOME
-rm run
-wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
+echo ""
+echo " Updating run script..."
+cd "$HOME"
+rm -f run
+wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
 chmod +x run
-cd $HOME
+echo " Run script updated"
 
-echo
-echo "Update complete!"
-echo "   - Latest files extracted."
-echo "   - Worlds backed up (if present)."
-echo
-echo "You can now start your server using your usual start script."
+cd "$HOME"
+
+echo ""
+echo "========================================="
+echo "   Update Complete!"
+echo "========================================="
+echo ""
+echo "Summary:"
+echo "  • Version: $VERSION_NAME"
+echo "  • Latest files extracted"
+echo "  • Worlds backed up (if present)"
+if [ "$VERSION_NAME" = "Preview/Beta" ]; then
+  echo ""
+  echo "  IMPORTANT for Preview/Beta:"
+  echo "  • Players need Minecraft Preview client"
+  echo "  • Some stable add-ons may not work"
+  echo "  • Script API beta add-ons now supported"
+fi
+echo ""
+echo "You can now start your server using:"
+echo "  cd ~"
+echo "  ./run"
+echo ""
