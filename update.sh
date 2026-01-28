@@ -83,7 +83,7 @@ fi
 
 cd $HOME
 rm run
-wget https://github.com/debojitsantra/BedrockServerTermux/blob/main/run
+wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
 chmod +x run
 cd $HOME
 
