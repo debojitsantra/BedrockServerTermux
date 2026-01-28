@@ -85,6 +85,7 @@ cd $HOME
 rm run
 wget https://github.com/debojitsantra/BedrockServerTermux/blob/main/run
 chmod +x run
+cd $HOME
 
 echo
 echo "Update complete!"
