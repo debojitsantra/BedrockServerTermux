@@ -27,7 +27,7 @@ need_cmd tar
 
 echo ""
 echo "========================================="
-echo "  Minecraft Bedrock Server Update Tool"
+echo "  BDS Update Tool"
 echo "========================================="
 echo ""
 echo "Choose which version to install:"
@@ -82,7 +82,7 @@ if [ -d "worlds" ]; then
   BACKUP_FILE="worlds_backup_${TS}.tar.gz"
   echo " Backing up 'worlds' directory to $BACKUP_FILE ..."
   tar -czf "$BACKUP_FILE" worlds || {
-    echo "❌ Failed to create backup. Aborting to avoid data loss."
+    echo "Failed to create backup. Aborting to avoid data loss."
     exit 1
   }
   echo " Backup complete."
@@ -115,6 +115,8 @@ if [ -f "bedrock_server" ]; then
   echo " Made bedrock_server executable"
 fi
 
+
+
 echo ""
 echo " Updating run script..."
 cd "$HOME"
@@ -146,3 +148,5 @@ echo "You can now start your server using:"
 echo "  cd ~"
 echo "  ./run"
 echo ""
+
+cd server && rm update.sh && cd "$HOME"
