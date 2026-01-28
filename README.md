@@ -50,7 +50,7 @@ Before you begin, ensure you have:
 
 - **Android Device**: 
   - Android 7.0 or higher
-  - Minimum 2GB RAM (4GB+ recommended)
+  - Minimum 2GB RAM (4GB+ recommended) 
   - 2GB+ free storage space
   
 - **Termux Application**:
@@ -213,6 +213,196 @@ chmod +x update.sh
 ```
 
 > ⚠️ **Important**: Always backup your world data before updating!
+
+
+## 🧩 Installing Mods / Add-ons
+
+> This section explains how to install Minecraft Bedrock add-ons (often called "mods") on this server.
+
+### ⚠️ Important Notes (Read First)
+
+- Minecraft Bedrock does NOT support Java mods (Forge/Fabric .jar files)
+- Bedrock uses Add-ons, which come as:
+  1. **Behavior Packs (BP)** → gameplay logic
+  2. **Resource Packs (RP)** → textures, models, sounds
+- Most add-ons require BOTH BP and RP
+- Some add-ons will not work on servers at all (see Script/Beta warning below)
+
+---
+
+###  Step 1: Extract .mcpack Files
+
+1. Rename the file:
+   ```
+   addon.mcpack → addon.zip
+   ```
+
+2. Extract the ZIP file
+
+3. Inside the extracted folder, you must see:
+   ```
+   manifest.json
+   ```
+
+If `manifest.json` is missing, the add-on will not work.
+
+---
+
+###  Step 2: Place Packs in Server Folders
+
+From inside Ubuntu:
+
+```bash
+cd ~/server
+```
+
+| Pack Type | Folder |
+|-----------|--------|
+| Behavior Pack | `behavior_packs/` |
+| Resource Pack | `resource_packs/` |
+
+Correct structure:
+```
+server/
+├── behavior_packs/
+│   └── MyAddon_BP/
+│       └── manifest.json
+├── resource_packs/
+│   └── MyAddon_RP/
+│       └── manifest.json
+```
+
+⚠️ Do NOT nest folders (no extra subfolder levels).
+
+---
+
+###  Step 3: Find Your World Folder
+
+Check `server.properties`:
+
+```bash
+nano server.properties
+```
+
+Look for:
+```
+level-name=Bedrock level
+```
+
+Your world folder:
+```
+server/worlds/Bedrock level/
+```
+
+---
+
+### Step 4: Enable the Behavior Pack
+
+Create or edit:
+
+```bash
+nano server/worlds/Bedrock\ level/world_behavior_packs.json
+```
+
+Paste:
+
+```json
+[
+  {
+    "pack_id": "UUID-FROM-BP-manifest",
+    "version": [1, 0, 0]
+  }
+]
+```
+
+Copy the UUID from:
+
+```json
+"header": {
+  "uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+}
+```
+
+⚠️ UUID only — no filenames, no extensions.
+
+---
+
+### Step 5: Enable the Resource Pack
+
+```bash
+nano server/worlds/Bedrock\ level/world_resource_packs.json
+```
+
+Paste:
+
+```json
+[
+  {
+    "pack_id": "UUID-FROM-RP-manifest",
+    "version": [1, 0, 0]
+  }
+]
+```
+
+BP UUID and RP UUID are different — this is normal.
+
+---
+
+###  Step 6: Enable Experimental Features
+
+Edit:
+
+```bash
+nano server/server.properties
+```
+
+Add:
+```
+experimental-gameplay=true
+```
+
+Optional (recommended for testing):
+```
+allow-cheats=true
+```
+
+---
+
+###  Step 7: Restart the Server
+
+```bash
+stop
+```
+
+Then start again:
+
+```bash
+./run
+```
+
+---
+
+###  Checking Logs
+
+If you see:
+```
+Configured pack was not found and was ignored
+Pack Stack - None
+```
+
+It means:
+- Wrong UUID
+- Pack folder not found
+- Add-on incompatible with server
+
+Success looks like:
+```
+Pack Stack - <YourAddonName>
+```
+
+---
+
+
 
 ## ⚙️ Configuration
 
