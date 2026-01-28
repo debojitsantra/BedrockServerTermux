@@ -199,8 +199,7 @@ Full command list: [Official Bedrock Server Commands](https://minecraft.wiki/w/C
 
 ## 🔄 Updating Your Server
 
-To update to the latest version of Minecraft Bedrock Server:
-
+To update to the latest stable or beta version of Minecraft Bedrock Server:
 ```bash
 # Navigate to server directory
 cd server
