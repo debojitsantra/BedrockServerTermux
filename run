@@ -1,21 +1,56 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Navigate to the server directory
-if cd server 2>/dev/null; then
-    echo "✅ Entered the 'server' directory."
-else
-    echo "❌ Error: 'server' folder not found. Please ensure the server is correctly installed."
-    exit 1
+SERVER_DIR="$HOME/server"
+START_SCRIPT="start.sh"
+USER_STOP=false
+
+
+trap 'USER_STOP=true' SIGINT
+
+
+if ! cd "$SERVER_DIR" 2>/dev/null; then
+  echo "Error: '$SERVER_DIR' not found."
+  exit 1
 fi
 
-# Run the server
-if [ -f "./start.sh" ]; then
-    chmod +x start.sh  # Ensure start.sh is executable
-    ./start.sh
-else
-    echo "❌ Error: 'start.sh' not found. Please check the installation."
-    exit 1
+
+if [[ ! -f "$START_SCRIPT" ]]; then
+  echo "Error: 'start.sh' not found."
+  exit 1
 fi
 
-# Return to the previous directory
-cd
+chmod +x "$START_SCRIPT"
+
+
+echo " Type 'stop' OR press Ctrl+C to stop"
+
+
+#watchdog
+while true; do
+  USER_STOP=false
+  echo "Starting Bedrock server..."
+  ./start.sh
+
+  EXIT_CODE=$?
+
+  
+  if [[ "$USER_STOP" == true ]]; then
+    echo
+    echo "Server stopped by user"
+    break
+  fi
+
+  if [[ $EXIT_CODE -eq 0 ]]; then
+    echo
+    echo "Server stopped by user"
+    break
+  fi
+
+  # Crash
+  echo
+  echo "Server crashed (exit code: $EXIT_CODE)."
+  echo "Restarting in 5 seconds..."
+  sleep 5
+done
+
