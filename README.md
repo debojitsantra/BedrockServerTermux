@@ -1,6 +1,6 @@
 # BedrockServerTermux
 
-![BedrockServerTermux](https://socialify.git.ci/debojitsantra/BedrockServerTermux/image?font=Jost&language=1&logo=https%3A%2F%2Fdebojitsantra.vercel.app%2Fimages%2Fbedrock-logo.svg&name=1&owner=1&pattern=Brick+Wall&stargazers=1&theme=Auto)
+![BedrockServerTermux](https://socialify.git.ci/debojitsantra/BedrockServerTermux/image?font=Jost&language=1&logo=https%3A%2F%2Fdebojitsantra.vercel.app%2Fimages%2Fbedrock-logo.svg&name=1&pattern=Brick+Wall&stargazers=1&theme=Auto)
 
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Android-green.svg)
