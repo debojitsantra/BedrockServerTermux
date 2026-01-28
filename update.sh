@@ -149,4 +149,4 @@ echo "  cd ~"
 echo "  ./run"
 echo ""
 
-cd server && rm update.sh && cd "$HOME"
+cd server && rm update.sh
