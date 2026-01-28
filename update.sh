@@ -80,6 +80,12 @@ if [ -f "bedrock_server" ]; then
   chmod +x bedrock_server
 fi
 
+
+cd $HOME
+rm run
+wget https://github.com/debojitsantra/BedrockServerTermux/blob/main/run
+chmod +x run
+
 echo
 echo "Update complete!"
 echo "   - Latest files extracted."
