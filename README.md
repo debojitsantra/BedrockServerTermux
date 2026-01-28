@@ -18,6 +18,7 @@
   - [Step 4: Making Your Server Accessible](#step-4-making-your-server-accessible)
 - [Server Management](#-server-management)
 - [Updating Your Server](#-updating-your-server)
+- [Installing Mods / Add-ons](#-installing-mods--add-ons)
 - [Configuration](#-configuration)
 - [Troubleshooting](#-troubleshooting)
 - [Performance Considerations](#-performance-considerations)
