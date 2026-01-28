@@ -18,6 +18,7 @@
   - [Step 4: Making Your Server Accessible](#step-4-making-your-server-accessible)
 - [Server Management](#-server-management)
 - [Updating Your Server](#-updating-your-server)
+- [Access via File Manager](#-access-via-file-manager)
 - [Installing Mods / Add-ons](#-installing-mods--add-ons)
 - [Configuration](#-configuration)
 - [Troubleshooting](#-troubleshooting)
@@ -213,6 +214,36 @@ chmod +x update.sh
 ```
 
 > ⚠️ **Important**: Always backup your world data before updating!
+
+
+
+## 📂 Accessing Ubuntu Files
+
+### File Locations
+
+Your Ubuntu installation files are stored at:
+```
+/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu
+```
+
+Or using the shortcut:
+```
+$PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu
+```
+
+### Access via File Manager
+
+To access your Ubuntu files using an Android file manager (with Storage Access Framework support), create a symbolic link to your Termux home directory:
+
+```bash
+ln -s $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu ~/ubuntu
+```
+
+After creating the symlink, you can browse your Ubuntu files at:
+```
+/storage/emulated/0/Android/data/com.termux/files/home/ubuntu
+```
+> **Note**: You'll need a file manager that supports Storage Access Framework (SAF), such as Material Files, Solid Explorer, or MiXplorer.
 
 
 ## 🧩 Installing Mods / Add-ons
