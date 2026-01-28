@@ -9,7 +9,7 @@
 ## 📖 Table of Contents
 
 - [Overview](#overview)
-- [Features](#features)
+- [Features](##features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
   - [Step 1: Install Ubuntu in Termux](#step-1-install-ubuntu-in-termux)
