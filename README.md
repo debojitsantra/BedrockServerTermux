@@ -513,8 +513,8 @@ tar -czf world_backup_$(date +%Y%m%d).tar.gz worlds/
 **Solutions:**
 - Reduce `view-distance` in `server.properties` (try 4-6)
 - Reduce `max-players` to 2-5 players
+- Reduce `max-threads` according to your device(try 5-6)
 - Close background apps to free up RAM
-- Use a device with better specifications
 - Reduce simulation distance in server settings
 </details>
 
