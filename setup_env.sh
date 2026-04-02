@@ -49,6 +49,13 @@ cd
 wget -q --show-progress https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
 chmod +x run
 
+#Update
+cd server
+
+wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh
+
+chmod +x update.sh
+./update.sh
 
 
 # Final message
