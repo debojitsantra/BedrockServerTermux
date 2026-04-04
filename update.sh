@@ -1,152 +1,167 @@
-#!/data/data/com.termux/files/usr/bin/bash
-set -e
+#!/bin/bash
+set -euo pipefail
 
-# config
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
+RESET='\033[0m'
+
+info()    { echo -e "${CYAN}[*]${RESET} $1"; }
+success() { echo -e "${GREEN}[✓]${RESET} $1"; }
+warn()    { echo -e "${YELLOW}[!]${RESET} $1"; }
+error()   { echo -e "${RED}[✗]${RESET} $1"; exit 1; }
+
 API_URL="https://net-secondary.web.minecraft-services.net/api/v1.0/download/links"
 SERVER_ZIP="bedrock_server_latest.zip"
 
-# check required commands 
-need_cmd() {
-  if ! command -v "$1" >/dev/null 2>&1; then
-    echo "Required command '$1' not found. Installing..."
-    pkg install -y "$1" || {
-      echo "Failed to install '$1'. Install it manually and rerun this script."
-      exit 1
-    }
-  fi
-}
 
-cd "$(dirname "$0")"
+for cmd in curl jq unzip wget tar; do
+  command -v "$cmd" >/dev/null 2>&1 || {
+    info "Installing missing dependency: $cmd"
+    apt install -y "$cmd" || error "Failed to install $cmd."
+  }
+done
 
-echo "Checking dependencies..."
-need_cmd curl
-need_cmd jq
-need_cmd unzip
-need_cmd wget
-need_cmd tar
 
+
+mapfile -t SERVER_FOLDERS < <(find "$HOME" -maxdepth 1 -type d -name "server*" | sort)
+
+if [ ${#SERVER_FOLDERS[@]} -eq 0 ]; then
+  warn "No existing server folders found. A new one will be created."
+fi
+
+# select veersion
+echo -e "${BOLD}Select version to install:${RESET}"
 echo ""
-echo "========================================="
-echo "  BDS Update Tool"
-echo "========================================="
+echo -e "  ${CYAN}1)${RESET} Latest Stable       ${GREEN}(Recommended)${RESET}"
+echo -e "  ${CYAN}2)${RESET} Latest Preview/Beta"
+echo -e "  ${CYAN}3)${RESET} Specific version    (e.g. 1.26.10.20)"
 echo ""
-echo "Choose which version to install:"
-echo ""
-echo "  1) Stable (Recommended for most servers)"
-echo ""
-echo "  2) Preview/Beta"
-echo ""
-echo -n "Enter your choice (1 or 2): "
+echo -n "Enter choice [1/2/3]: "
 read -r VERSION_CHOICE
 
 case "$VERSION_CHOICE" in
   1)
-    DOWNLOAD_TYPE="serverBedrockLinux"
-    VERSION_NAME="Stable"
+    info "Fetching latest stable URL..."
+    DOWNLOAD_URL="$(curl -s "$API_URL" | jq -r '.result.links[] | select(.downloadType=="serverBedrockLinux") | .downloadUrl')"
+    DEFAULT_DIR="server"
+    VERSION_LABEL="Latest Stable"
     ;;
   2)
-    DOWNLOAD_TYPE="serverBedrockPreviewLinux"
-    VERSION_NAME="Preview/Beta"
+    info "Fetching latest preview URL..."
+    DOWNLOAD_URL="$(curl -s "$API_URL" | jq -r '.result.links[] | select(.downloadType=="serverBedrockPreviewLinux") | .downloadUrl')"
+    DEFAULT_DIR="server_preview"
+    VERSION_LABEL="Latest Preview"
+    ;;
+  3)
+    echo ""
+    echo -n "Enter version number (e.g. 1.26.10.4): "
+    read -r CUSTOM_VERSION
+    DOWNLOAD_URL="https://www.minecraft.net/bedrockdedicatedserver/bin-linux/bedrock-server-${CUSTOM_VERSION}.zip"
+    DEFAULT_DIR="server_${CUSTOM_VERSION}"
+    VERSION_LABEL="$CUSTOM_VERSION"
+    warn "old versions may not work on ARM. If it crashes, use option 1."
     ;;
   *)
-    echo ""
-    echo " Invalid choice. Please run the script again and choose 1 or 2."
-    exit 1
+    error "Invalid choice."
     ;;
 esac
 
-echo ""
-echo " Selected: $VERSION_NAME version"
-echo ""
-echo "Fetching latest Bedrock server download URL from Mojang..."
-
-DOWNLOAD_URL="$(
-  curl -s "$API_URL" \
-  | jq -r ".result.links[] | select(.downloadType==\"$DOWNLOAD_TYPE\") | .downloadUrl"
-)"
-
 if [ -z "$DOWNLOAD_URL" ] || [ "$DOWNLOAD_URL" = "null" ]; then
-  echo " Could not get latest Bedrock server download URL."
-  echo "   The API may have changed or is down."
-  echo "   Download type requested: $DOWNLOAD_TYPE"
-  exit 1
+  error "Could not resolve download URL. The API may be down."
 fi
 
-echo " Found latest $VERSION_NAME server URL:"
-echo "   $DOWNLOAD_URL"
+#select folder
+echo ""
+echo -e "${BOLD}Select target folder:${RESET}"
 echo ""
 
-# backup
+INDEX=1
+for folder in "${SERVER_FOLDERS[@]}"; do
+  NAME="$(basename "$folder")"
+  if [ "$NAME" = "$DEFAULT_DIR" ]; then
+    echo -e "  ${CYAN}${INDEX})${RESET} $NAME  ${GREEN}(default for this version)${RESET}"
+  else
+    echo -e "  ${CYAN}${INDEX})${RESET} $NAME"
+  fi
+  INDEX=$((INDEX + 1))
+done
+
+echo -e "  ${CYAN}N)${RESET} Create a new folder"
+echo ""
+echo -n "Enter choice: "
+read -r FOLDER_CHOICE
+
+if [[ "$FOLDER_CHOICE" =~ ^[Nn]$ ]]; then
+  echo -n "Enter new folder name (default: $DEFAULT_DIR): "
+  read -r NEW_FOLDER
+  SERVER_DIR="$HOME/${NEW_FOLDER:-$DEFAULT_DIR}"
+elif [[ "$FOLDER_CHOICE" =~ ^[0-9]+$ ]] && [ "$FOLDER_CHOICE" -ge 1 ] && [ "$FOLDER_CHOICE" -le ${#SERVER_FOLDERS[@]} ]; then
+  SERVER_DIR="${SERVER_FOLDERS[$((FOLDER_CHOICE - 1))]}"
+else
+  
+  SERVER_DIR="$HOME/$DEFAULT_DIR"
+fi
+
+echo ""
+success "Version : $VERSION_LABEL"
+success "Folder  : $SERVER_DIR"
+echo ""
+
+
+mkdir -p "$SERVER_DIR"
+cd "$SERVER_DIR"
+
 if [ -d "worlds" ]; then
   TS="$(date +%Y%m%d_%H%M%S)"
   BACKUP_FILE="worlds_backup_${TS}.tar.gz"
-  echo " Backing up 'worlds' directory to $BACKUP_FILE ..."
-  tar -czf "$BACKUP_FILE" worlds || {
-    echo "Failed to create backup. Aborting to avoid data loss."
-    exit 1
-  }
-  echo " Backup complete."
-  echo ""
+  info "Backing up worlds → $BACKUP_FILE ..."
+  tar -czf "$BACKUP_FILE" worlds || error "Backup failed. Aborting to protect your worlds."
+  success "Backup saved: $BACKUP_FILE"
 else
-  echo "  No 'worlds' directory found. Skipping world backup."
-  echo ""
+  warn "No 'worlds' directory found — skipping backup."
 fi
 
-# download
-echo "  Downloading latest $VERSION_NAME Bedrock server..."
+echo ""
+
+
+info "Downloading $VERSION_LABEL..."
+rm -f "$SERVER_ZIP"
+wget -q --show-progress "$DOWNLOAD_URL" -O "$SERVER_ZIP" || error "Download failed."
+
+info "Extracting server files..."
+unzip -o "$SERVER_ZIP" || error "Extraction failed."
 rm -f "$SERVER_ZIP"
 
-wget -q --show-progress "$DOWNLOAD_URL" -O "$SERVER_ZIP" || {
-  echo " Failed to download Bedrock server ZIP."
-  exit 1
-}
-
-echo " Download complete: $SERVER_ZIP"
-echo ""
-
-echo " Updating server files from ZIP..."
-unzip -o "$SERVER_ZIP" || {
-  echo " Failed to unzip server package."
-  exit 1
-}
-
-if [ -f "bedrock_server" ]; then
-  chmod +x bedrock_server
-  echo " Made bedrock_server executable"
-fi
+[ -f "bedrock_server" ] && chmod +x bedrock_server && success "bedrock_server marked executable."
 
 
+info "Updating autostart.sh..."
+#wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/autostart.sh
+chmod +x autostart.sh
 
-echo ""
-echo " Updating run script..."
+
 cd "$HOME"
-rm -f run
-wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
+info "Updating run script..."
+#wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
 chmod +x run
-echo " Run script updated"
 
-cd "$HOME"
 
 echo ""
-echo "========================================="
-echo "   Update Complete!"
-echo "========================================="
+echo -e "${GREEN}${BOLD} Update complete!${RESET}"
 echo ""
-echo "Summary:"
-echo "  • Version: $VERSION_NAME"
-echo "  • Latest files extracted"
-echo "  • Worlds backed up (if present)"
-if [ "$VERSION_NAME" = "Preview/Beta" ]; then
-  echo ""
-  echo "  IMPORTANT for Preview/Beta:"
-  echo "  • Players need Minecraft Preview client"
-  echo "  • Some stable add-ons may not work"
-  echo "  • Script API beta add-ons now supported"
+echo -e "  ${BOLD}Version :${RESET} $VERSION_LABEL"
+echo -e "  ${BOLD}Folder  :${RESET} $SERVER_DIR"
+echo -e "  ${BOLD}Worlds  :${RESET} Backed up (if present)"
+echo ""
+echo -e "  Start server: ${CYAN}cd ~ && ./run${RESET}"
+echo ""
+if [ "$VERSION_CHOICE" = "2" ]; then
+  warn "Preview/Beta: players need Minecraft Preview client to connect."
 fi
-echo ""
-echo "You can now start your server using:"
-echo "  cd ~"
-echo "  ./run"
-echo ""
-
-cd server && rm update.sh
+if [ "$VERSION_CHOICE" = "3" ]; then
+  warn "If the server crashes immediately, this version may be incompatible with your device."
+  warn "Run ./update.sh again and choose option 1 to revert to latest stable."
+fi
