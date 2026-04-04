@@ -5,8 +5,9 @@
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Android-green.svg)
 ![Termux](https://img.shields.io/badge/Termux-Required-orange.svg)
+![Maintained](https://img.shields.io/badge/maintained-yes-green.svg)
 
-> Run a fully functional Minecraft Bedrock Dedicated Server on your Android device using Termux and Ubuntu (proot-distro)
+Run a Minecraft Bedrock Dedicated Server on your Android device using Termux and Debian (proot-distro).
 
 ## Table of Contents
 
@@ -14,287 +15,170 @@
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-  - [Step 1: Install Ubuntu in Termux](#step-1-install-ubuntu-in-termux)
-  - [Step 2: Setup Environment & Minecraft Server](#step-2-setup-environment--minecraft-server)
-  - [Step 3: Running the Server](#step-3-running-the-server)
-  - [Step 4: Making Your Server Accessible](#step-4-making-your-server-accessible)
+- [Running the Server](#running-the-server)
+- [Making Your Server Accessible](#making-your-server-accessible)
 - [Server Management](#server-management)
 - [Updating Your Server](#updating-your-server)
-- [Access via File Manager](#accessing-ubuntu-files)
-- [Installing Mods / Add-ons](#installing-mods--add-ons)
+- [Accessing Files](#accessing-files)
+- [Installing Add-ons](#installing-add-ons)
 - [Configuration](#configuration)
 - [Troubleshooting](#troubleshooting)
-- [Performance Considerations](#performance-considerations)
+- [Performance](#performance)
 - [FAQ](#faq)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 
-##  Overview
+## Overview
 
-BedrockServerTermux allows you to host a Minecraft Bedrock Edition server directly on your Android device without requiring root access. This project leverages:
+BedrockServerTermux hosts a Minecraft Bedrock Edition server on Android without root access using:
 
-- **Termux**: A powerful terminal emulator for Android
-- **proot-distro**: To run a full Ubuntu environment
-- **Box64**: ARM64 to x86_64 translation layer for running the Bedrock server
-- **Playit.gg**: Tunneling service to make your server accessible over the internet
+- **Termux** — terminal emulator for Android
+- **proot-distro** — runs a full Debian environment
+- **Box64** — ARM64 to x86_64 translation layer
+- **Playit.gg** — tunneling service for internet access
 
-##  Features
+## Features
 
--  **No Root Required**: Works on any modern Android device
--  **Automated Setup**: Simple installation scripts handle all dependencies
-- **Full-Featured Server**: Supports all Minecraft Bedrock Edition features
--  **Easy Updates**: One-command server updates
-- **Internet Accessible**: Built-in tunneling support with Playit.gg
-- **Free to Use**: No subscriptions or hosting fees
+- No root required
+- Simple installation scripts
+- Version selection — latest stable, preview, or any specific version
+- Multiple server instances in separate folders
+- One-command updates with automatic world backup
+- Built-in tunneling via Playit.gg
 
-##  Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have:
-
-- **Android Device**: 
-  - Android 7.0 or higher
-  - Minimum 2GB RAM (4GB+ recommended) 
-  - 2GB+ free storage space
-  
-- **Termux Application**:
-  - ⚠️ **IMPORTANT**: Install Termux from [F-Droid](https://f-droid.org/packages/com.termux/), NOT from Google Play Store
-  - Google Play Store version is outdated and incompatible
-  
-- **Internet Connection**: 
-  - Stable connection required for installation and server hosting
-  - WiFi recommended for best performance
-
-- **Basic Knowledge**:
-  - Familiarity with command-line interfaces helpful but not required
-  - Ability to follow step-by-step instructions
+- Android 7.0 or higher
+- Minimum 2GB RAM (4GB+ recommended)
+- 2GB+ free storage
+- Termux from [F-Droid](https://f-droid.org/packages/com.termux/) — the Play Store version is outdated
+- Stable internet connection
 
 ## Installation
 
-### Step 1: Install Ubuntu in Termux
+### Step 1: Set up Debian in Termux
 
-1. Open **Termux** and execute the following commands:
+Open Termux and run:
 
 ```bash
-# Update Termux packages
-apt update -y
-apt upgrade -y
-
-# Install wget
+apt update -y && apt upgrade -y
 apt install wget -y
-
-# Download and run Ubuntu setup script
-wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_ubuntu.sh
-bash setup_ubuntu.sh
+wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_proot.sh
+bash setup_proot.sh
 ```
 
-2. After installation completes, log in to Ubuntu:
+After it finishes, log in to Debian:
 
 ```bash
-proot-distro login ubuntu
+pdd
+```
+or
+```bash
+proot-distro login debian
 ```
 
-> **Note**: You should now see a prompt starting with `root@localhost` indicating you're in the Ubuntu environment.
 
-### Step 2: Setup Environment & Minecraft Server
+### Step 2: Set up the server environment
 
-1. Inside the Ubuntu session, run these commands:
+Inside the Debian session:
 
 ```bash
-# Update Ubuntu packages
-apt update -y
-apt upgrade -y
-
-# Install wget
+apt update -y && apt upgrade -y
 apt install wget -y
-
-# Download and run environment setup script
 wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_env.sh
 bash setup_env.sh
 ```
 
-2. This script will automatically:
-   - Install **Box64** (x86_64 emulation layer)
-   - Install **Playit** (tunneling service)
-   - Install **Git** and other dependencies
-   - Download the latest Minecraft Bedrock Dedicated Server
-   - Extract and configure server files
+The script will ask you to choose a version and install folder, then handle everything automatically — Box64, Playit, server download, and extraction.
 
-> ⏱️ **Estimated Time**: 5-10 minutes depending on your internet connection
+Estimated time: 5–10 minutes depending on your connection.
 
-### Step 3: Running the Server
+## Running the Server
 
-You'll need **two separate Termux sessions** (windows/tabs) for this step.
+You need two separate Termux sessions.
 
-#### Session 1: Minecraft Server
+**Session 1 — server:**
 
-1. Open your first Termux session
-2. Log in to Ubuntu:
 ```bash
-proot-distro login ubuntu
+pdd
 ```
-
-3. Navigate to the root directory and start the server:
 ```bash
 cd ~
 ./run
 ```
 
-> The server will begin starting up. You should see server logs appearing.
+If you have multiple server folders installed, `run` will list them and let you choose which one to start.
 
-#### Session 2: Playit Tunnel
+**Session 2 — tunnel:**
 
-1. Open a **second** Termux session (swipe from left edge → New Session)
-2. Log in to Ubuntu:
 ```bash
-proot-distro login ubuntu
+pdd
 ```
-
-3. Start the Playit tunneling service:
 ```bash
 playit
 ```
 
-### Step 4: Making Your Server Accessible
+## Making Your Server Accessible
 
-1. After running `playit`, you'll see a URL displayed in the terminal
-2. Copy this URL and open it in your web browser
-3. Follow the setup instructions on [playit.gg](https://playit.gg) to:
-   - Create a free account (if you don't have one)
-   - Claim your tunnel
-   - Get your server's public address
+After running `playit`, open the displayed URL in a browser, create a free Playit account, claim your tunnel, and share the public address with players.
 
-4. Share the public address with friends to let them join your server!
+## Server Management
 
-##  Server Management
+**Stop the server:**
 
-### Starting the Server
+Type `stop` in the server session, or press `Ctrl+C`.
+
+**Available console commands:**
+
+- `stop` — gracefully stop the server
+- `list` — list connected players
+- `kick <player>` — kick a player
+- `ban <player>` — ban a player
+- `save` — force save the world
+
+Full command reference: [Minecraft Wiki — Commands](https://minecraft.wiki/w/Commands)
+
+## Updating Your Server
 
 ```bash
-# In Ubuntu environment
 cd ~
-./run
-```
-
-### Stopping the Server
-
-In the server session, type:
-```bash
-stop
-```
-
-Or press `Ctrl + C` to force stop.
-
-### Viewing Server Logs
-
-Server logs are displayed in real-time in the session where you ran `./run`.
-
-### Server Console Commands
-
-While the server is running, you can use standard Bedrock server commands:
-- `stop` - Gracefully stop the server
-- `list` - List connected players
-- `kick <player>` - Kick a player
-- `ban <player>` - Ban a player
-- `save` - Force save the world
-
-Full command list: [Official Bedrock Server Commands](https://minecraft.wiki/w/Commands)
-
-##  Updating Your Server
-
-To update to the latest stable or beta version of Minecraft Bedrock Server:
-```bash
-# Navigate to server directory
-cd server
-
-# Download update script
-wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh
-
-# Make it executable and run
-chmod +x update.sh
 ./update.sh
 ```
 
-> ⚠️ **Important**: Always backup your world data before updating!
+The update script lets you choose the version and target folder, backs up your worlds automatically, then downloads and extracts the new server files.
 
+## Accessing Files
 
+Ubuntu files are at:
 
-##  Accessing Ubuntu Files
-
-### File Locations
-
-Your Ubuntu installation files are stored at:
 ```
-/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu
+/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian
 ```
 
-Or using the shortcut:
-```
-$PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu
-```
-
-### Access via File Manager
-
-To access your Ubuntu files using an Android file manager (with Storage Access Framework support), create a symbolic link to your Termux home directory:
+To browse them from a file manager, create a symlink:
 
 ```bash
-ln -s $PREFIX/var/lib/proot-distro/installed-rootfs/ubuntu ~/ubuntu
+ln -s $PREFIX/var/lib/proot-distro/installed-rootfs/debian ~/debian
 ```
 
-After creating the symlink, you can browse your Ubuntu files at:
+Then navigate to:
 ```
-/storage/emulated/0/Android/data/com.termux/files/home/ubuntu
-```
-> **Note**: You'll need a file manager that supports Storage Access Framework (SAF), such as Material Files, Solid Explorer, or MiXplorer.
-
-
-##  Installing Mods / Add-ons
-
-> This section explains how to install Minecraft Bedrock add-ons (often called "mods") on this server.
-
-###  Important Notes (Read First)
-
-- Minecraft Bedrock does NOT support Java mods (Forge/Fabric .jar files)
-- Bedrock uses Add-ons, which come as:
-  1. **Behavior Packs (BP)** → gameplay logic
-  2. **Resource Packs (RP)** → textures, models, sounds
-- Most add-ons require BOTH BP and RP
-- Some add-ons will not work on servers at all (see Script/Beta warning below)
-
----
-
-###  Step 1: Extract .mcpack Files
-
-1. Rename the file:
-   ```
-   addon.mcpack → addon.zip
-   ```
-
-2. Extract the ZIP file
-
-3. Inside the extracted folder, you must see:
-   ```
-   manifest.json
-   ```
-
-If `manifest.json` is missing, the add-on will not work.
-
----
-
-###  Step 2: Place Packs in Server Folders
-
-From inside Ubuntu:
-
-```bash
-cd ~/server
+/storage/emulated/0/Android/data/com.termux/files/home/debian
 ```
 
-| Pack Type | Folder |
-|-----------|--------|
-| Behavior Pack | `behavior_packs/` |
-| Resource Pack | `resource_packs/` |
+Requires a file manager with Storage Access Framework support (Material Files, Solid Explorer, MiXplorer).
 
-Correct structure:
+## Installing Add-ons
+
+Bedrock uses behavior packs and resource packs. Java mods (.jar) are not supported.
+
+**Step 1: Extract the pack**
+
+Rename `.mcpack` to `.zip` and extract it. The extracted folder must contain `manifest.json` at the root level.
+
+**Step 2: Place packs in server folders**
+
 ```
 server/
 ├── behavior_packs/
@@ -305,39 +189,19 @@ server/
 │       └── manifest.json
 ```
 
-⚠️ Do NOT nest folders (no extra subfolder levels).
+Do not add extra subfolder levels.
 
----
-
-###  Step 3: Find Your World Folder
-
-Check `server.properties`:
+**Step 3: Find your world name**
 
 ```bash
-nano server.properties
+grep level-name ~/server/server.properties
 ```
 
-Look for:
-```
-level-name=Bedrock level
-```
-
-Your world folder:
-```
-server/worlds/Bedrock level/
-```
-
----
-
-### Step 4: Enable the Behavior Pack
-
-Create or edit:
+**Step 4: Enable the behavior pack**
 
 ```bash
-nano server/worlds/Bedrock\ level/world_behavior_packs.json
+nano ~/server/worlds/<level-name>/world_behavior_packs.json
 ```
-
-Paste:
 
 ```json
 [
@@ -348,25 +212,11 @@ Paste:
 ]
 ```
 
-Copy the UUID from:
-
-```json
-"header": {
-  "uuid": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-}
-```
-
-⚠️ UUID only — no filenames, no extensions.
-
----
-
-### Step 5: Enable the Resource Pack
+**Step 5: Enable the resource pack**
 
 ```bash
-nano server/worlds/Bedrock\ level/world_resource_packs.json
+nano ~/server/worlds/<level-name>/world_resource_packs.json
 ```
-
-Paste:
 
 ```json
 [
@@ -377,265 +227,154 @@ Paste:
 ]
 ```
 
-BP UUID and RP UUID are different — this is normal.
+The BP and RP UUIDs are different — copy each from their respective `manifest.json`.
 
----
+**Step 6: Enable experimental features if required**
 
-###  Step 6: Enable Experimental Features
+Add to `server.properties`:
 
-Edit:
-
-```bash
-nano server/server.properties
-```
-
-Add:
 ```
 experimental-gameplay=true
 ```
 
-Optional (recommended for testing):
-```
-allow-cheats=true
-```
-
----
-
-###  Step 7: Restart the Server
+**Step 7: Restart the server**
 
 ```bash
 stop
-```
-
-Then start again:
-
-```bash
 ./run
 ```
 
----
-
-###  Checking Logs
-
-If you see:
-```
-Configured pack was not found and was ignored
-Pack Stack - None
-```
-
-It means:
-- Wrong UUID
-- Pack folder not found
-- Add-on incompatible with server
-
-Success looks like:
-```
-Pack Stack - <YourAddonName>
-```
-
----
-
-
+If the pack loaded correctly you'll see `Pack Stack - <AddonName>` in the logs. `Pack Stack - None` means wrong UUID or missing folder.
 
 ## Configuration
 
-### Server Properties
-
-Edit server settings in `server.properties`:
+Edit server settings:
 
 ```bash
-cd ~/server
-nano server.properties
+nano ~/server/server.properties
 ```
 
-Key settings to configure:
-- `server-name` - Your server's display name
-- `gamemode` - survival, creative, adventure
-- `difficulty` - peaceful, easy, normal, hard
-- `max-players` - Maximum number of players
-- `view-distance` - Render distance (lower = better performance)
-- `server-port` - Default is 19132
+Key options:
 
-After editing, press `Ctrl + X`, then `Y`, then `Enter` to save.
+| Option | Description |
+|--------|-------------|
+| `server-name` | Server display name |
+| `gamemode` | survival, creative, adventure |
+| `difficulty` | peaceful, easy, normal, hard |
+| `max-players` | Player limit |
+| `view-distance` | Render distance |
+| `server-port` | Default 19132 |
 
-### World Management
+Save with `Ctrl+X`, `Y`, `Enter`.
 
-Your world data is stored in:
-```
-~/server/worlds/
-```
+**Manual world backup:**
 
-To backup your world:
 ```bash
 cd ~/server
 tar -czf world_backup_$(date +%Y%m%d).tar.gz worlds/
 ```
 
-##  Troubleshooting
+## Troubleshooting
 
-### Common Issues
+**Server crashes immediately**
 
-<details>
-<summary><b>Server won't start / crashes immediately</b></summary>
-
-**Solutions:**
-- Ensure you're in the `/root` directory when running `./run`
-- Check if you have enough free RAM (close other apps)
+- Make sure you're running `./run` from `~`
+- Check available RAM (close background apps)
 - Verify Box64 is installed: `box64 --version`
-- Check server logs for specific error messages
-</details>
+- If running an older specific version, it may be incompatible with Box64 on ARM — use latest stable instead
 
-<details>
-<summary><b>Players can't connect to server</b></summary>
+**Players can't connect**
 
-**Solutions:**
 - Verify Playit is running in a separate session
-- Check your Playit tunnel status at playit.gg
-- Ensure server is running and shows "Server started" in logs
-- Verify the correct port (usually 19132) is configured
+- Check tunnel status at playit.gg
+- Confirm the server shows "Server started" in logs
 - Make sure you're sharing the correct Playit address
-</details>
 
-<details>
-<summary><b>Installation script fails</b></summary>
+**Installation fails**
 
-**Solutions:**
 - Run `apt update` before retrying
-- Check your internet connection
-- Ensure you have enough storage space
-- Try restarting Termux and starting over
-- Make sure Termux is from F-Droid, not Play Store
-</details>
+- Check internet connection and storage space
+- Restart Termux and try again
+- Confirm Termux is from F-Droid
 
-<details>
-<summary><b>Server is laggy / slow performance</b></summary>
+**Server is slow or laggy**
 
-**Solutions:**
-- Reduce `view-distance` in `server.properties` (try 4-6)
-- Reduce `max-players` to 2-5 players
+- Lower `view-distance` to 4–6 in `server.properties`
+- Lower `max-players`
+- Close background apps
 - Reduce `max-threads` according to your device(try 5-6)
-- Close background apps to free up RAM
-- Reduce simulation distance in server settings
-</details>
+- Keep device plugged in
 
-<details>
-<summary><b>Termux keeps closing / server stops</b></summary>
+**Termux closes unexpectedly**
 
-**Solutions:**
-- Acquire wakelock: `termux-wake-lock`
-- Enable "Don't kill my app" settings for Termux
+- Run `termux-wake-lock` in Termux
 - Disable battery optimization for Termux
-- Keep device plugged in while hosting
-</details>
+- Enable "Don't kill my app" for Termux in device settings
 
-### Getting Help
+If the issue isn't listed here, [search existing issues](https://github.com/debojitsantra/BedrockServerTermux/issues) or open a new one with your Android version, device model, RAM, and the full error output.
 
-If you encounter issues:
+## Performance
 
-1. Check the [Troubleshooting](#troubleshooting) section
-2. Search [existing issues](https://github.com/debojitsantra/BedrockServerTermux/issues)
-3. Create a new issue with:
-   - Your Android version
-   - Device model and RAM
-   - Complete error messages
-   - Steps to reproduce the problem
+| RAM | Players | View distance |
+|-----|---------|---------------|
+| 2–3GB | 1–2 | 4–6 |
+| 4–6GB | 2–5 | 6–8 |
+| 8GB+ | 5–10 | 8–10 |
 
-##  Performance Considerations
+The server runs through Box64 (x86_64 → ARM64 translation), so CPU usage will be higher than native and some lag is expected compared to PC hosting.
 
-### Expected Performance
+## FAQ
 
-- **Low-end devices** (2-3GB RAM): 1-2 players, view distance 4-6
-- **Mid-range devices** (4-6GB RAM): 2-5 players, view distance 6-8
-- **High-end devices** (8GB+ RAM): 5-10 players, view distance 8-10
+**Do I need root?**
+No.
 
-### Optimization Tips
+**Can I run multiple server versions?**
+Yes. The setup and update scripts let you install each version into a separate folder. `./run` lists all available servers at startup.
 
-1. **Reduce render distance**: Lower values significantly improve performance
-2. **Limit max players**: Fewer players = better performance
-3. **Keep device cool**: Overheating causes throttling
-4. **Close background apps**: Free up as much RAM as possible
-5. **Use WiFi**: More stable than mobile data
-6. **Keep device charged**: Low battery can reduce performance
+**Is my world data safe during updates?**
+The update script backs up your worlds before extracting new files.
 
-### Box64 Translation Overhead
+**Can I run this 24/7?**
+Yes, keep the device plugged in, disable battery optimization for Termux, and use `termux-wake-lock`.
 
-The server runs through Box64 (x86_64 → ARM64 translation), which adds some performance overhead. This is why:
-- Server may use more CPU than native
-- Some lag is expected compared to PC hosting
-- Performance varies by device capabilities
+**Can I use plugins?**
+Behavior packs and resource packs are supported. Java plugins (Bukkit/Spigot) are not.
 
-##  FAQ
+**Can I play on the same device?**
+Yes, connect using `localhost:19132`, but performance will be affected.
 
-**Q: Do I need root access?**  
-A: No, this solution works without root privileges.
+**Does this work on tablets?**
+Yes, any ARM64 Android device works.
 
-**Q: Can I run this 24/7?**  
-A: Yes, but keep your device plugged in and ensure it doesn't overheat. Enable battery optimization exceptions for Termux.
+**How much data does hosting use?**
+Roughly 50–200 MB per hour with active players.
 
-**Q: Is my world data safe?**  
-A: Regular backups are recommended. The server stores worlds in `~/server/worlds/`.
-
-**Q: Can I use plugins/addons?**  
-A: Yes, you can add behavior packs and resource packs to the server like any Bedrock server.
-
-**Q: Does this work on tablets?**  
-A: Yes, any ARM64 Android device can run this.
-
-**Q: Can I play on the same device?**  
-A: Yes, but performance will be significantly impacted. Use `localhost:19132` to connect.
-
-**Q: How much data does hosting use?**  
-A: Varies by player count and activity. Expect 50-200 MB per hour with active players.
-
-**Q: Can I use a custom port?**  
-A: Yes, modify `server-port` in `server.properties` and configure Playit accordingly.
-
-##  Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Report bugs**: Open an issue with detailed information
-2. **Suggest features**: Share your ideas in the issues section
-3. **Improve documentation**: Submit PRs for documentation improvements
-4. **Share your experience**: Help others in discussions
-
-### Development
-
-If you want to contribute code:
+## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add your feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a pull request
 
-##  License
+Bug reports and documentation improvements are also welcome.
 
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+## License
 
-##  Acknowledgments
+GPL-3.0 — see the [LICENSE](LICENSE) file for details.
 
-- **[Termux](https://termux.com/)** - Terminal emulator for Android
-- **[proot-distro](https://github.com/termux/proot-distro)** - Termux package for managing Linux distributions
-- **[Box64](https://github.com/ptitSeb/box64)** - x86_64 emulator for ARM64
-- **[Playit.gg](https://playit.gg)** - Tunneling service for game servers
-- **[Mojang/Microsoft](https://www.minecraft.net/)** - Minecraft Bedrock Dedicated Server
-- All contributors and users who have helped improve this project
+## Acknowledgments
 
-##  Support & Community
-
-- **Website**: [debojitsantra.vercel.app/BedrockServerTermux](https://debojitsantra.vercel.app/BedrockServerTermux)
-- **GitHub Issues**: [Report bugs or request features](https://github.com/debojitsantra/BedrockServerTermux/issues)
-- **Discussions**: Share your experience and help others
+- [Termux](https://termux.com/)
+- [proot-distro](https://github.com/termux/proot-distro)
+- [Box64](https://github.com/ptitSeb/box64)
+- [Playit.gg](https://playit.gg)
+- [Mojang/Microsoft](https://www.minecraft.net/)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for the Minecraft community**
-
-If you found this helpful, consider giving it a ⭐ on GitHub!
-
-[Report Bug](https://github.com/debojitsantra/BedrockServerTermux/issues) • [Request Feature](https://github.com/debojitsantra/BedrockServerTermux/issues) • [Documentation](https://debojitsantra.vercel.app/BedrockServerTermux)
+[Report Bug](https://github.com/debojitsantra/BedrockServerTermux/issues) · [Request Feature](https://github.com/debojitsantra/BedrockServerTermux/issues) · [Documentation](https://debojitsantra.vercel.app/BedrockServerTermux)
 
 </div>
