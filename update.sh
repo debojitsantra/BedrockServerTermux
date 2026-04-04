@@ -139,13 +139,13 @@ rm -f "$SERVER_ZIP"
 
 
 info "Updating autostart.sh..."
-#wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/autostart.sh
+wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/autostart.sh
 chmod +x autostart.sh
 
 
 cd "$HOME"
 info "Updating run script..."
-#wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
+wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
 chmod +x run
 
 
