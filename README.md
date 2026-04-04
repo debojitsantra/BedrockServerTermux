@@ -150,7 +150,7 @@ The update script lets you choose the version and target folder, backs up your w
 
 ## Accessing Files
 
-Ubuntu files are at:
+Debian files are at:
 
 ```
 /data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian
