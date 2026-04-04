@@ -16,8 +16,6 @@ error()   { echo -e "${RED}[✗]${RESET} $1"; exit 1; }
 USER_STOP=false
 trap 'USER_STOP=true' SIGINT
 
-
-
 mapfile -t SERVER_FOLDERS < <(find "$HOME" -maxdepth 1 -type d -name "server*" | sort)
 
 if [ ${#SERVER_FOLDERS[@]} -eq 0 ]; then
@@ -71,12 +69,16 @@ echo ""
 
 cd "$SERVER_DIR"
 
+
+PAGESIZE="$(getconf PAGESIZE 2>/dev/null || echo 4096)"
+info "Detected page size: ${PAGESIZE} bytes"
+
 _run_server() {
   export LD_LIBRARY_PATH=".:/usr/lib/aarch64-linux-gnu:/lib/aarch64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
   export BOX64_LOG=0
   export BOX64_MMAP32=1
   export BOX64_NOSIGSEGV=1
-  export BOX64_PAGESIZE=4096
+  export BOX64_PAGESIZE="${PAGESIZE}"
   export BOX64_DYNAREC_WAIT=1
   export BOX64_DYNAREC_STRONGMEM=1
   box64 bedrock_server 2>&1 | grep -v 'Box64 with Dynarec'
