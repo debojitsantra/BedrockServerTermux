@@ -4,7 +4,7 @@ Run a **Minecraft Java Edition server** directly in Termux - no root, no proot, 
 
 Works on **both 32-bit and 64-bit ARM** Android devices.
 
-> Looking for the Bedrock server instead? [Back to main guide](../README.md)
+> Looking for the Bedrock server instead? [Back to main guide](README.md)
 
 ---
 
