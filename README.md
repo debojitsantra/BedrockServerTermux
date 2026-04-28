@@ -9,6 +9,9 @@
 
 Run a Minecraft Bedrock Dedicated Server on your Android device using Termux and Debian (proot-distro).
 
+> ☕ **Running a 32-bit device or want Java Edition with Bedrock support?** → [Java Server Setup (PaperMC + Geyser)](JAVA_SERVER.md)
+
+
 ## Table of Contents
 
 - [Overview](#overview)
