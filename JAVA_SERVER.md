@@ -55,12 +55,17 @@ Each separate server gets its own run script:
 ```
 *(or `~/run_{version}` for a versioned server)*
 
-**Session 2 — Start the tunnel (if Playit was installed):**
+**Session 2 — Start the tunnel daemon (if Playit was installed):**
 ```bash
-playit
+playitd &
 ```
 
-After running `playit`, open the URL it shows in a browser, create a free Playit account, claim your tunnel, and share the address with players.
+**Session 3 — Manage/Claim the tunnel:**
+```bash
+playit-cli
+```
+
+After running `playit-cli`, open the URL it shows in a browser, create a free Playit account, claim your tunnel, and share the address with players.
 
 **Stop the server** — type in the server console:
 ```

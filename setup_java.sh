@@ -258,8 +258,10 @@ echo -e "  ${CYAN}Session 1 — Start server:${RESET}"
 echo -e "    ${CYAN}$RUN_SCRIPT${RESET}"
 echo ""
 if $INSTALL_PLAYIT; then
-    echo -e "  ${CYAN}Session 2 — Start tunnel:${RESET}"
-    echo -e "    ${CYAN}playit${RESET}"
+    echo -e "  ${CYAN}Session 2 — Start tunnel daemon:${RESET}"
+    echo -e "    ${CYAN}playitd &${RESET}"
+    echo -e "  ${CYAN}Session 3 — Manage/Claim tunnel:${RESET}"
+    echo -e "    ${CYAN}playit-cli${RESET}"
     echo ""
 fi
 echo -e "  ${BOLD}Stop server:${RESET}  type ${CYAN}stop${RESET} in the server console"

@@ -113,18 +113,27 @@ cd ~
 
 If you have multiple server folders installed, `run` will list them and let you choose which one to start.
 
-**Session 2 — tunnel:**
+**Session 2 — tunnel daemon:**
 
 ```bash
 pdd
 ```
 ```bash
-playit
+playitd &
+```
+
+**Session 3 — claim/manage tunnel:**
+
+```bash
+pdd
+```
+```bash
+playit-cli
 ```
 
 ## Making Your Server Accessible
 
-After running `playit`, open the displayed URL in a browser, create a free Playit account, claim your tunnel, and share the public address with players.
+After running `playit-cli`, open the displayed URL in a browser, create a free Playit account, claim your tunnel, and share the public address with players.
 
 ## Server Management
 

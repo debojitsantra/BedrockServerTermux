@@ -25,13 +25,10 @@ info "Installing dependencies..."
 apt install -y git box64 sudo jq unzip tar curl wget gpg || error "Failed to install required packages."
 
 
-info "Setting up Playit repository..."
-sudo apt-key del '16AC CC32 BD41 5DCC 6F00  D548 DA6C D75E C283 9680' 2>/dev/null || true
-sudo rm -f /etc/apt/sources.list.d/playit-cloud.list
-curl -SsL https://playit-cloud.github.io/ppa/key.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/playit.gpg >/dev/null
-echo "deb [signed-by=/etc/apt/trusted.gpg.d/playit.gpg] https://playit-cloud.github.io/ppa/data ./" | sudo tee /etc/apt/sources.list.d/playit-cloud.list
-sudo apt update -y
-apt install -y playit || warn "Playit installation failed — install it manually later."
+info "Installing Playit (portable daemon and CLI)..."
+curl -SsL -o /usr/local/bin/playitd https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-aarch64 || warn "Playit daemon installation failed."
+curl -SsL -o /usr/local/bin/playit-cli https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-cli-linux-aarch64 || warn "Playit CLI installation failed."
+chmod +x /usr/local/bin/playitd /usr/local/bin/playit-cli 2>/dev/null || true
 
 #version
 echo ""
