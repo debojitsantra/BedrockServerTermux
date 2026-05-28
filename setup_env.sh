@@ -101,12 +101,6 @@ unzip -o bedrock_server_latest.zip || error "Extraction failed."
 rm -f bedrock_server_latest.zip
 chmod +x bedrock_server
 
-
-info "Downloading autostart.sh..."
-wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/autostart.sh
-chmod +x autostart.sh
-
-
 cd "$HOME"
 
 info "Downloading run script..."
