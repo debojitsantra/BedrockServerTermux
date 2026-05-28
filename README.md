@@ -153,12 +153,33 @@ Full command reference: [Minecraft Wiki — Commands](https://minecraft.wiki/w/C
 
 ## Updating Your Server
 
+### Updating the Minecraft Server
+
 ```bash
 cd ~
 ./update.sh
 ```
 
 The update script lets you choose the version and target folder, backs up your worlds automatically, then downloads and extracts the new server files.
+
+### Updating Setup & Control Scripts
+
+If you want to update the helper and installation scripts to the latest versions to get new features and bug fixes:
+
+**Inside Debian (updates `run`, `update.sh`, and `setup_env.sh`):**
+```bash
+cd ~
+wget -q -O run https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run && chmod +x run
+wget -q -O update.sh https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh && chmod +x update.sh
+wget -q -O setup_env.sh https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_env.sh && chmod +x setup_env.sh
+```
+
+**Outside Debian (in Termux, updates `setup_proot.sh`):**
+```bash
+cd ~
+wget -q -O setup_proot.sh https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_proot.sh && chmod +x setup_proot.sh
+```
+
 
 ## Accessing Files
 

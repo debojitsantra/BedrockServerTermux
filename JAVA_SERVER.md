@@ -76,11 +76,24 @@ stop
 
 ## Updating
 
+### Updating the Minecraft Server
+
 An update script is downloaded automatically during setup:
 
 ```bash
 ~/update_java.sh
 ```
+
+### Updating Setup & Control Scripts
+
+To update the setup and update scripts to their latest versions for new features and bug fixes:
+
+```bash
+cd ~
+wget -q -O setup_java.sh https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/main/setup_java.sh && chmod +x setup_java.sh
+wget -q -O update_java.sh https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/main/update_java.sh && chmod +x update_java.sh
+```
+
 
 ## Connecting
 
