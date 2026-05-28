@@ -36,5 +36,9 @@ echo ""
 echo -e "  ${BOLD}Next steps:${RESET}"
 echo -e "  1. Type ${CYAN}pdd${RESET} to enter Debian"
 echo -e "  2. Inside Debian, run:"
-echo -e "     ${CYAN}curl -fsSL https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/main/setup_env.sh | bash${RESET}"
+echo -e "     ${CYAN}
+apt update -y && apt upgrade -y
+apt install wget -y
+wget https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/setup_env.sh
+bash setup_env.sh${RESET}"
 echo ""
