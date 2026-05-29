@@ -99,7 +99,7 @@ Estimated time: 5–10 minutes depending on your connection.
 
 ## Running the Server
 
-You need two separate Termux sessions.
+You need three separate Termux sessions.
 
 **Session 1 — server:**
 
