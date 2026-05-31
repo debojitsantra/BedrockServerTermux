@@ -411,3 +411,8 @@ GPL-3.0 — see the [LICENSE](LICENSE) file for details.
 [Report Bug](https://github.com/debojitsantra/BedrockServerTermux/issues) · [Request Feature](https://github.com/debojitsantra/BedrockServerTermux/issues) · [Documentation](https://debojitsantra.vercel.app/BedrockServerTermux)
 
 </div>
+
+## You can help me by Donating
+
+[![Ko-Fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/debojitsantra) 
+[![Donate using Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/debojitsantra/donate)
