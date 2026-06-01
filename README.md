@@ -6,7 +6,8 @@
 ![Platform](https://img.shields.io/badge/platform-Android-green.svg)
 ![Termux](https://img.shields.io/badge/Termux-Required-orange.svg)
 <!--![Maintained](https://img.shields.io/badge/maintained-yes-green.svg)-->
-![Maintained](https://img.shields.io/badge/maintained-temporarily_paused-orange)
+
+![Maintenance](https://img.shields.io/badge/maintenance-temporarily_paused-orange)
 
 Run a Minecraft Bedrock Dedicated Server on your Android device using Termux and Debian (proot-distro).
 
