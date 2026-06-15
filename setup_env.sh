@@ -22,7 +22,7 @@ info "Updating packages..."
 apt update -y && apt upgrade -y
 
 info "Installing dependencies..."
-apt install -y git box64 sudo jq unzip tar curl wget gpg || error "Failed to install required packages."
+apt install -y git box64 sudo jq unzip tar curl wget gpg rsync || error "Failed to install required packages."
 
 
 info "Installing Playit (portable daemon and CLI)..."
@@ -110,6 +110,10 @@ chmod +x run
 info "Downloading update script..."
 wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/update.sh
 chmod +x update.sh
+
+info "Downloading addon installer..."
+wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/install_addon.sh
+chmod +x install_addon.sh
 
 
 echo ""
