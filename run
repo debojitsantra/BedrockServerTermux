@@ -16,7 +16,11 @@ error()   { echo -e "${RED}[✗]${RESET} $1"; exit 1; }
 USER_STOP=false
 trap 'USER_STOP=true' SIGINT
 
-mapfile -t SERVER_FOLDERS < <(find "$HOME" -maxdepth 1 -type d -name "server*" | sort)
+SERVER_FOLDERS=()
+# Use globbing to avoid process substitution and /dev/fd issues in proot-distro
+for folder in "$HOME"/server*; do
+  [ -d "$folder" ] && SERVER_FOLDERS+=("$folder")
+done
 
 if [ ${#SERVER_FOLDERS[@]} -eq 0 ]; then
   error "No server folders found in $HOME. Run setup_env.sh first."

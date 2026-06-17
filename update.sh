@@ -26,7 +26,11 @@ done
 
 
 
-mapfile -t SERVER_FOLDERS < <(find "$HOME" -maxdepth 1 -type d -name "server*" | sort)
+SERVER_FOLDERS=()
+# Use globbing to avoid process substitution and /dev/fd issues in proot-distro
+for folder in "$HOME"/server*; do
+  [ -d "$folder" ] && SERVER_FOLDERS+=("$folder")
+done
 
 if [ ${#SERVER_FOLDERS[@]} -eq 0 ]; then
   warn "No existing server folders found. A new one will be created."

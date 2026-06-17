@@ -320,6 +320,18 @@ if [ "$REMOVE_MODE" = true ]; then
 fi
 
 # ==============================================================================
+# Temporary Workspace
+# ==============================================================================
+
+TEMP_DIR=$(mktemp -d)
+CLEAN_MANIFEST="$TEMP_DIR/clean_manifest.json"
+
+cleanup() {
+    rm -rf "$TEMP_DIR"
+}
+trap cleanup EXIT
+
+# ==============================================================================
 # Collect Addon Sources
 # ==============================================================================
 
@@ -332,9 +344,10 @@ done
 
 for ad in "${ADDON_DIRS[@]}"; do
     [ -d "$ad" ] || error "Addon directory does not exist: $ad"
+    find "$ad" -type f \( -name "*.mcaddon" -o -name "*.mcpack" -o -name "*.zip" \) -print0 > "$TEMP_DIR/find_sources.tmp"
     while IFS= read -r -d '' f; do
         ADDON_SOURCES+=("$f")
-    done < <(find "$ad" -type f \( -name "*.mcaddon" -o -name "*.mcpack" -o -name "*.zip" \) -print0)
+    done < "$TEMP_DIR/find_sources.tmp"
 done
 
 [ "${#ADDON_SOURCES[@]}" -eq 0 ] && error "No addon paths or directories provided. Use -a or -d."
@@ -376,18 +389,6 @@ mkdir -p "$SERVER_ROOT/resource_packs"
 mkdir -p "$SERVER_ROOT/behavior_packs"
 
 # ==============================================================================
-# Temporary Workspace
-# ==============================================================================
-
-TEMP_DIR=$(mktemp -d)
-CLEAN_MANIFEST="$TEMP_DIR/clean_manifest.json"
-
-cleanup() {
-    rm -rf "$TEMP_DIR"
-}
-trap cleanup EXIT
-
-# ==============================================================================
 # Extract Addon Sources
 # ==============================================================================
 
@@ -404,12 +405,13 @@ for ADDON_SRC in "${ADDON_SOURCES[@]}"; do
 done
 
 # Extract nested .mcpack files
+find "$TEMP_DIR" -type f -name "*.mcpack" -print0 > "$TEMP_DIR/subpacks.tmp"
 while IFS= read -r -d '' subpack; do
     subpack_dir="${subpack%.mcpack}"
     mkdir -p "$subpack_dir"
     unzip -qo "$subpack" -d "$subpack_dir"
     rm -f "$subpack"
-done < <(find "$TEMP_DIR" -type f -name "*.mcpack" -print0)
+done < "$TEMP_DIR/subpacks.tmp"
 
 # ==============================================================================
 # Find & Process Manifests
@@ -417,6 +419,7 @@ done < <(find "$TEMP_DIR" -type f -name "*.mcpack" -print0)
 
 MANIFEST_COUNT=0
 
+find "$TEMP_DIR" -type f -name "manifest.json" -print0 > "$TEMP_DIR/manifests.tmp"
 while IFS= read -r -d '' manifest; do
     MANIFEST_COUNT=$((MANIFEST_COUNT + 1))
     PACK_DIR=$(dirname "$manifest")
@@ -486,7 +489,7 @@ while IFS= read -r -d '' manifest; do
         fi
     done
 
-done < <(find "$TEMP_DIR" -type f -name "manifest.json" -print0)
+done < "$TEMP_DIR/manifests.tmp"
 
 if [ "$MANIFEST_COUNT" -eq 0 ]; then
     error "No manifest.json files found. This is probably not a valid Bedrock addon."
