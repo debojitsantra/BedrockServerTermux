@@ -17,7 +17,7 @@ API_URL="https://net-secondary.web.minecraft-services.net/api/v1.0/download/link
 SERVER_ZIP="bedrock_server_latest.zip"
 
 
-for cmd in curl jq unzip wget tar; do
+for cmd in curl jq unzip wget tar rsync; do
   command -v "$cmd" >/dev/null 2>&1 || {
     info "Installing missing dependency: $cmd"
     apt install -y "$cmd" || error "Failed to install $cmd."
@@ -26,7 +26,11 @@ done
 
 
 
-mapfile -t SERVER_FOLDERS < <(find "$HOME" -maxdepth 1 -type d -name "server*" | sort)
+SERVER_FOLDERS=()
+# Use globbing to avoid process substitution and /dev/fd issues in proot-distro
+for folder in "$HOME"/server*; do
+  [ -d "$folder" ] && SERVER_FOLDERS+=("$folder")
+done
 
 if [ ${#SERVER_FOLDERS[@]} -eq 0 ]; then
   warn "No existing server folders found. A new one will be created."
@@ -147,6 +151,10 @@ cd "$HOME"
 info "Updating run script..."
 wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/run
 chmod +x run
+
+info "Updating addon installer..."
+wget -q https://raw.githubusercontent.com/debojitsantra/BedrockServerTermux/refs/heads/main/install_addon.sh
+chmod +x install_addon.sh
 
 
 echo ""

@@ -206,6 +206,12 @@ Requires a file manager with Storage Access Framework support (Material Files, S
 
 ## Installing Add-ons
 
+A convenience script automates addon installs:
+```bash
+./install_addon.sh -s ~/server -w <world-name> -a path/to/addon.mcaddon --create
+```
+Run `./install_addon.sh --help` for full options.
+
 Bedrock uses behavior packs and resource packs. Java mods (.jar) are not supported.
 
 **Step 1: Extract the pack**
