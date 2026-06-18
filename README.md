@@ -188,13 +188,13 @@ wget -q -O setup_proot.sh https://raw.githubusercontent.com/debojitsantra/Bedroc
 Debian files are at:
 
 ```
-/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian
+/data/data/com.termux/files/usr/var/lib/proot-distro/containers/debian/rootfs
 ```
 
 To browse them from a file manager, create a symlink:
 
 ```bash
-ln -s $PREFIX/var/lib/proot-distro/installed-rootfs/debian ~/debian
+ln -s $PREFIX/var/lib/proot-distro/containers/debian/rootfs ~/debian
 ```
 
 Then navigate to:
