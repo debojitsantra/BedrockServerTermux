@@ -5,9 +5,8 @@
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Android-green.svg)
 ![Termux](https://img.shields.io/badge/Termux-Required-orange.svg)
-<!--![Maintained](https://img.shields.io/badge/maintained-yes-green.svg)-->
+![Maintained](https://img.shields.io/badge/maintained-yes-green.svg)
 
-![Maintenance](https://img.shields.io/badge/maintenance-temporarily_paused-orange)
 
 Run a Minecraft Bedrock Dedicated Server on your Android device using Termux and Debian (proot-distro).
 
@@ -205,6 +204,9 @@ Then navigate to:
 Requires a file manager with Storage Access Framework support (Material Files, Solid Explorer, MiXplorer).
 
 ## Installing Add-ons
+- Bedrock uses behavior packs and resource packs. Java mods (.jar) are not supported.
+
+### Automatic Way
 
 A convenience script automates addon installs:
 ```bash
@@ -212,7 +214,7 @@ A convenience script automates addon installs:
 ```
 Run `./install_addon.sh --help` for full options.
 
-Bedrock uses behavior packs and resource packs. Java mods (.jar) are not supported.
+### Manual Way
 
 **Step 1: Extract the pack**
 
