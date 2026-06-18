@@ -418,7 +418,8 @@ GPL-3.0 — see the [LICENSE](LICENSE) file for details.
 
 <div align="center">
 
-[Report Bug](https://github.com/debojitsantra/BedrockServerTermux/issues) · [Request Feature](https://github.com/debojitsantra/BedrockServerTermux/issues) · [Documentation](https://debojitsantra.vercel.app/BedrockServerTermux)
+[Report Bug or Request a feature](https://github.com/debojitsantra/BedrockServerTermux/issues) 
+
 
 </div>
 
