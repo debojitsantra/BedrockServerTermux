@@ -37,8 +37,8 @@ pkg update -y
 success "TUR repo ready."
 
 
-info "Installing Java 21, wget, curl, jq..."
-pkg install -y openjdk-21 wget curl jq || error "Failed to install dependencies."
+info "Installing Java, wget, curl, jq..."
+pkg install -y openjdk-26 wget curl jq || error "Failed to install dependencies."
 success "Dependencies installed."
 
 
@@ -50,7 +50,7 @@ if [[ -z "$VERSIONS_JSON" ]]; then
     error "Could not fetch PaperMC versions. Check your internet connection."
 fi
 
-VERSIONS_RAW=$(echo "$VERSIONS_JSON" | jq -r '.versions | to_entries[].value[]' | grep -E '^1[.]' | grep -v 'rc\|pre')
+VERSIONS_RAW=$(echo "$VERSIONS_JSON" | jq -r '.versions | to_entries[].value[]' | grep -E '^[0-9]+[.][0-9]+' | grep -Ev 'rc|pre' | sort -t. -k1,1nr -k2,2nr -k3,3nr)
 LATEST=$(echo "$VERSIONS_RAW" | head -1)
 STABLE_VERSIONS=$(echo "$VERSIONS_RAW" | head -10)
 
